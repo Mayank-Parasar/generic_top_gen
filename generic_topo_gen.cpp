@@ -27,6 +27,7 @@ Topology::create_topology() {
     cout << "This is the template of the function: create_topology()"<< endl;
     cout << "Num-nodes: " << get_num_nodes() << endl;
     cout << "Num-links: " << get_num_links() << endl;
+
     /*
      * Algorithm:
      * From the pool of free links, take one link
@@ -52,11 +53,29 @@ Topology::set_params(int nodes, int links) {
 
 bool
 Topology::is_strongly_connected(Topology * t) {
-    cout << "This function checks if the given topology generated is strongly connected" << endl;
-
+    cout << "This function checks if the given topology "
+            "generated is strongly connected" << endl;
+    /*Algorithm:
+     * Starting with the nod_id-0, start traversing the
+     * topology using link connections. If we comeback
+     * to the node-0 after traversing all the links then
+     * topology is strongly connected..
+     * (Use a standard algorithm for finding
+     * if graph is SCC)
+     * */
     return false;
 }
 
+void
+Topology::populate_hop_matrix() {
+    /*
+     * function populates the hop-matrix
+     * using Dijkstra's algorithm
+     * by finding the shortest path
+     */
+
+    return;
+}
 
 // class-Node member definition
 Node::Node(int nodeId) {

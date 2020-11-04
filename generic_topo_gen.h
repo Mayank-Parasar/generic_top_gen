@@ -17,7 +17,10 @@ class Topology {
 private:
     uint16_t m_num_nodes;
     uint32_t m_num_links;
-
+    std::vector<std::vector<int>> hop_matrix;
+    // move it to be private members (later)
+    std::vector<Node*> nodes;
+    std::vector<Link*> links;
 public:
     Topology(); //default ctor
     Topology(uint16_t num_nodes, uint32_t num_links);
@@ -31,6 +34,7 @@ public:
     void set_num_links(int num_links) {
         m_num_links = num_links;
     }
+
     // Getter
     int get_num_nodes() {
         return m_num_nodes;
@@ -39,9 +43,7 @@ public:
         return m_num_links;
     }
 
-    // move it to be private members (later)
-    std::vector<Node*> nodes;
-    std::vector<Link*> links;
+    void populate_hop_matrix();
 };
 
 class Node {
