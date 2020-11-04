@@ -24,9 +24,9 @@ Topology::Topology(uint16_t num_nodes, uint32_t num_links)
 
 void
 Topology::create_topology() {
-    cout << "This is the template of the function: create_topology()"<< endl;
-    cout << "Num-nodes: " << get_num_nodes() << endl;
-    cout << "Num-links: " << get_num_links() << endl;
+//    cout << "This is the template of the function: create_topology()"<< endl;
+//    cout << "Num-nodes: " << get_num_nodes() << endl;
+//    cout << "Num-links: " << get_num_links() << endl;
 
     /*
      * Algorithm:
@@ -40,7 +40,25 @@ Topology::create_topology() {
      * this topology otherwise repeat this function from scratch
      * again creating a new topology.
      * */
-
+    srand((unsigned) time(0));
+    for (int link_id = 0; link_id < m_num_links; ++link_id) {
+        /* Two nodes at a time */
+        int src_node_id, dest_node_id;
+        do {
+            src_node_id = rand()%m_num_nodes;
+            dest_node_id = rand()%m_num_nodes;
+        } while (src_node_id == dest_node_id);
+        /* Now we have different src and destination node for this link
+         * connect it*/
+        nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+        nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+        /*update the same in the link pointer as well*/
+        links[link_id]->src_node = nodes[src_node_id];
+        links[link_id]->dest_node = nodes[dest_node_id];
+        cout << "link-"<< link_id << " connects node(src): " << src_node_id
+            << " to node(dest): " << dest_node_id << endl;
+    }
+    /* Here we should have a random topology: check if it is a valid one? */
     return;
 }
 

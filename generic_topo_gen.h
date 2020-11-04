@@ -8,6 +8,8 @@
 #include <cstdint>
 #include <iostream>
 #include <vector>
+#include <cstdlib> // for rand() and srand()
+#include <ctime> // for time()
 
 class Node;
 class Link;
