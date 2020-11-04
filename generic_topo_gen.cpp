@@ -5,6 +5,11 @@
 #include "generic_topo_gen.h"
 
 using namespace  std;
+// Topology
+Topology::Topology(uint16_t num_nodes, uint32_t num_links)
+: m_num_nodes(num_nodes), m_num_links(num_links)
+{};
+
 void
 Topology::create_topology() {
     cout << "This is the template of the function: create_topology()"<< endl;
@@ -26,4 +31,31 @@ Topology::is_strongly_connected(Topology * t) {
     cout << "This function checks if the given topology generated is strongly connected" << endl;
 
     return false;
+}
+
+
+// Node
+Node::Node() {
+    node_id = -1;
+    outgoing_link = nullptr;
+    incoming_link = nullptr;
+}
+
+Node::Node(int nodeId, Link* outgoingLink, Link* incomingLink) {
+    node_id = nodeId;
+    outgoing_link = outgoingLink;
+    incoming_link = incomingLink;
+}
+
+// Link
+Link::Link() {
+    link_id = -1;
+    src_node = nullptr;
+    dest_node = nullptr;
+}
+
+Link::Link(int linkId, Node* srcNode, Node* destNode) {
+    link_id = linkId;
+    src_node = srcNode;
+    dest_node = destNode;
 }
