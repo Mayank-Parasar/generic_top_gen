@@ -1,6 +1,16 @@
+//
+// Created by Mayank Parasar on 11/1/20.
+//
 #include <iostream>
 #include "generic_topo_gen.h"
 using namespace  std;
+
+/* TODO:
+ * have a separate .cpp and .h file for
+ * 1. Topology class
+ * 2. Node class
+ * 3. Link class
+ * */
 
 int main(int argc, char const *argv[])
 {
