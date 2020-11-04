@@ -30,9 +30,10 @@ class Node {
 public:
     Node(); // default ctor
     Node(int nodeId, Link* outgoingLink, Link* incomingLink);
+    Node(int nodeId, std::vector<Link*> outgoingLinks, std::vector<Link*> incomingLinks);
     int node_id;
-    Link* outgoing_link;
-    Link* incoming_link;
+    std::vector<Link*> outgoing_link;
+    std::vector<Link*> incoming_link;
 };
 
 class Link {

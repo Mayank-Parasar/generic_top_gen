@@ -5,7 +5,7 @@
 #include "generic_topo_gen.h"
 
 using namespace  std;
-// Topology
+// class-Topology member definition
 Topology::Topology(uint16_t num_nodes, uint32_t num_links)
 : m_num_nodes(num_nodes), m_num_links(num_links)
 {};
@@ -34,20 +34,28 @@ Topology::is_strongly_connected(Topology * t) {
 }
 
 
-// Node
+// class-Node member definition
 Node::Node() {
     node_id = -1;
-    outgoing_link = nullptr;
-    incoming_link = nullptr;
+//    outgoing_link = nullptr;
+//    incoming_link = nullptr;
 }
 
 Node::Node(int nodeId, Link* outgoingLink, Link* incomingLink) {
     node_id = nodeId;
-    outgoing_link = outgoingLink;
-    incoming_link = incomingLink;
+    outgoing_link.push_back(outgoingLink);
+    incoming_link.push_back(incomingLink);
 }
 
-// Link
+Node::Node(int nodeId, vector<Link*> outgoingLinks, vector<Link*> incomingLinks) {
+    node_id = nodeId;
+    for(auto i : outgoingLinks)
+        outgoing_link.push_back(i);
+    for(auto i : incomingLinks)
+        incoming_link.push_back(i);
+}
+
+// class-Link member definition
 Link::Link() {
     link_id = -1;
     src_node = nullptr;
