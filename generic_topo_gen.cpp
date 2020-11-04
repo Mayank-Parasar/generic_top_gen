@@ -15,7 +15,17 @@ Topology::create_topology() {
     cout << "This is the template of the function: create_topology()"<< endl;
     cout << "Num-nodes: " << m_num_nodes << endl;
     cout << "Num-links: " << m_num_links << endl;
-
+    // call the ctor of Nodes* and Link* class here
+    /* Creating nodes */
+    for (int node_id = 0; node_id < m_num_nodes; ++node_id) {
+        Node* node_ = new Node(node_id);
+        nodes.push_back(node_);
+    }
+    /* Creating Links */
+    for (int link_id = 0; link_id < m_num_links; ++link_id) {
+        Link* link_ = new Link(link_id, nullptr, nullptr);
+        links.push_back(link_);
+    }
     return;
 }
 
@@ -35,8 +45,8 @@ Topology::is_strongly_connected(Topology * t) {
 
 
 // class-Node member definition
-Node::Node() {
-    node_id = -1;
+Node::Node(int nodeId) {
+    node_id = nodeId;
 //    outgoing_link = nullptr;
 //    incoming_link = nullptr;
 }

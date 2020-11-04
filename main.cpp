@@ -16,13 +16,21 @@ int main(int argc, char const *argv[])
     uint32_t num_links = strtoul(argv[2], nullptr, 10);
     cout << "num-links: " << num_links << endl;
 
+    uint16_t num_topology = 1;
+
+
     if(num_nodes > num_links) {
         cout << "Number of nodes are greater than number of links, " \
                 "therefore a SCC topology is not possible" << endl;
+        exit(-1);
     }
+    else {
+        // continue building topology
+    }
+    /* Do this for each topology in a for loop */
 
 	Topology *topo = new Topology(num_nodes, num_links);
-//    topo->set_params()
+    //    topo->set_params()
     topo->create_topology();
     topo->is_strongly_connected(topo);
 
