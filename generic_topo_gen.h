@@ -40,8 +40,6 @@ public:
     }
 
     // move it to be private members (later)
-
-
     std::vector<Node*> nodes;
     std::vector<Link*> links;
 };

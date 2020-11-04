@@ -8,13 +8,7 @@ using namespace  std;
 // class-Topology member definition
 Topology::Topology(uint16_t num_nodes, uint32_t num_links)
 : m_num_nodes(num_nodes), m_num_links(num_links)
-{};
-
-void
-Topology::create_topology() {
-    cout << "This is the template of the function: create_topology()"<< endl;
-    cout << "Num-nodes: " << m_num_nodes << endl;
-    cout << "Num-links: " << m_num_links << endl;
+{
     // call the ctor of Nodes* and Link* class here
     /* Creating nodes */
     for (int node_id = 0; node_id < m_num_nodes; ++node_id) {
@@ -26,6 +20,26 @@ Topology::create_topology() {
         Link* link_ = new Link(link_id, nullptr, nullptr);
         links.push_back(link_);
     }
+};
+
+void
+Topology::create_topology() {
+    cout << "This is the template of the function: create_topology()"<< endl;
+    cout << "Num-nodes: " << get_num_nodes() << endl;
+    cout << "Num-links: " << get_num_links() << endl;
+    /*
+     * Algorithm:
+     * From the pool of free links, take one link
+     * and randomly connect it to any src-node and
+     * then to any different dest-node.
+     *
+     * Keep doing it until all the links are exhausted.
+     * Then call the function: Topology::is_strongly_connected()
+     * to determine, if the topology is valid. If yes the output
+     * this topology otherwise repeat this function from scratch
+     * again creating a new topology.
+     * */
+
     return;
 }
 
