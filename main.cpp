@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     uint32_t num_nodes = 0;
     uint32_t num_links = 0;
     uint32_t num_topology = 0;
+
     // First configure all possible command line options.
     Parser parser("Customized C++ command line parser.");
     parser.addArgument({"-n", "--nodes"}, &num_nodes, "Number of Nodes in the topology");
