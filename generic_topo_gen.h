@@ -23,6 +23,7 @@ private:
     // move it to be private members (later)
     std::vector<Node*> nodes;
     std::vector<Link*> links;
+    std::vector<std::vector<Node*>> ring_topologies;
 public:
     Topology(); //default ctor
     Topology(uint16_t num_nodes, uint32_t num_links);
@@ -36,7 +37,7 @@ public:
     void set_num_links(int num_links) {
         m_num_links = num_links;
     }
-
+    void create_rings(std::vector<Node*> nodes_, int start, int end);
     // Getter
     int get_num_nodes() {
         return m_num_nodes;
@@ -44,6 +45,10 @@ public:
     int get_num_links(){
         return m_num_links;
     }
+
+    const std::vector<Node *> &getNodes() const;
+
+    void setNodes(const std::vector<Node *> &nodes);
 
     void populate_hop_matrix();
 };

@@ -95,6 +95,18 @@ Topology::populate_hop_matrix() {
     return;
 }
 
+const vector<Node *> &Topology::getNodes() const {
+    return nodes;
+}
+
+void Topology::setNodes(const vector<Node *> &nodes) {
+    Topology::nodes = nodes;
+}
+
+void Topology::create_rings(std::vector<Node *> nodes_, int start, int end) {
+
+}
+
 // class-Node member definition
 Node::Node(int nodeId) {
     node_id = nodeId;

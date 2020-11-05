@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
 
     // This variables can be set via the command line.
     bool        oPrintHelp = false;
-    uint32_t num_nodes = 0;
-    uint32_t num_links = 0;
-    uint32_t num_topology = 0;
+    uint32_t    num_nodes = 0;
+    uint32_t    num_links = 0;
+    uint32_t    num_topology = 0;
 
     // First configure all possible command line options.
     Parser parser("Customized C++ command line parser.");
@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
 
 	Topology *topo = new Topology(num_nodes, num_links);
     //    topo->set_params()
+    topo->create_rings(topo->getNodes(), 0, topo->getNodes().size()-1);
     topo->create_topology();
     topo->is_strongly_connected(topo);
 
