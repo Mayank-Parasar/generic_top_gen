@@ -3,4 +3,4 @@ project(generic_topo_gen)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(generic_topo_gen main.cpp generic_topo_gen.cpp generic_topo_gen.h)
+add_executable(generic_topo_gen main.cpp generic_topo_gen.cpp generic_topo_gen.h commandline_parser.cpp commandline_parser.h)

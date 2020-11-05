@@ -42,7 +42,7 @@ Topology::create_topology() {
      * */
     srand((unsigned) time(0));
     for (int link_id = 0; link_id < m_num_links; ++link_id) {
-        /* Two nodes at a time */
+        /* Two different nodes at a time */
         int src_node_id, dest_node_id;
         do {
             src_node_id = rand()%m_num_nodes;
