@@ -127,29 +127,16 @@ Topology::create_topology() {
         assert(links[ii]->dest_node == nullptr);
     }
 
-
-    // Also generates the connectivity matrix here..
-
-    /*
-     * Algorithm:
-     * From the pool of free links, take one link
-     * and randomly connect it to any src-node and
-     * then to any different dest-node.
-     *
-     * Keep doing it until all the links are exhausted.
-     * Then call the function: Topology::is_strongly_connected()
-     * to determine, if the topology is valid. If yes the output
-     * this topology otherwise repeat this function from scratch
-     * again creating a new topology.
-     * */
-    // srand((unsigned) time(0));
-    for (int link_id = 0; link_id < m_num_links; ++link_id) {
+    for (int link_id = m_num_nodes; link_id < m_num_links; ++link_id) {
         /* Two different nodes at a time */
         int src_node_id, dest_node_id;
         do {
             src_node_id = rand()%m_num_nodes;
             dest_node_id = rand()%m_num_nodes;
-        } while (src_node_id == dest_node_id);
+        } while (/*if they are same node then repeat*/
+                (src_node_id ==dest_node_id) ||
+                /*if they are already connected then also repeat*/
+                is_connected(nodes[src_node_id], nodes[dest_node_id]));
         /* Now we have different src and destination node for this link
          * connect it*/
         nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
@@ -160,7 +147,16 @@ Topology::create_topology() {
         cout << "link-"<< link_id << " connects node(src): " << src_node_id
             << " to node(dest): " << dest_node_id << endl;
     }
-    /* Here we should have a random topology: check if it is a valid one? */
+    // Also generates the connectivity matrix here..
+    // column is 'src'-node (sender) and row is 'dest'-node(receiver)
+    for(int ii = 0; ii < m_num_nodes; ii++) {
+        vector<int> v(m_num_nodes, 0); // all elements = 0
+        for(auto k : nodes[ii]->outgoing_link)
+            v[k->dest_node->node_id] = 1;
+        m_connectivity_matrix.push_back(v);
+    }
+
+    // Generate hop matrix here as well
     return;
 }
 
@@ -205,6 +201,18 @@ void Topology::setNodes(const vector<Node *> &nodes) {
     Topology::nodes = nodes;
 }
 
+bool Topology::is_connected(Node *src_node, Node *dest_node) {
+    // for all the outgoing links from src-node;
+    // check if dest-node has same link-id for incoming node
+    for( auto i : src_node->outgoing_link) {
+        for( auto k : dest_node->incoming_link) {
+            if(i->link_id == k->link_id)
+                return true;
+        }
+    }
+    // if control comes here... return false (these nodes are not connected)
+    return false;
+}
 
 
 // class-Node member definition

@@ -38,9 +38,10 @@ private:
     uint32_t m_num_nodes;
     uint32_t m_num_links;
     // generate "avg-hop count"
-    std::vector<std::vector<int>> hop_matrix;
+    std::vector<std::vector<int>> m_hop_matrix;
     // this contains the information of actual topology
-    std::vector<std::vector<int>> connectivity_matrix;
+    // column is 'src'-node (sender) and row is 'dest'-node(receiver)
+    std::vector<std::vector<int>> m_connectivity_matrix;
     // move it to be private members (later)
     std::vector<Node*> nodes;
     std::vector<Link*> links;
@@ -54,6 +55,7 @@ public:
                        std::vector<int> mBaseRing);
     void create_topology();
     void set_params(int nodes, int links);
+    bool is_connected(Node* src_node, Node* dest_node);
     bool is_strongly_connected(Topology* );
     // Setter
     void set_num_nodes(int num_nodes) {
