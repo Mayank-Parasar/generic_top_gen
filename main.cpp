@@ -64,15 +64,19 @@ int main(int argc, char *argv[])
     else {
         // continue building topology
     }
+
+    /* Create the topolo*/
     /* Do this for each topology in a for loop */
 
 	Topology *topo = new Topology(num_nodes, num_links);
     //    topo->set_params()
-    topo->create_rings(topo->getNodes(), 0, topo->getNodes().size()-1);
+    topo->create_ring();
     topo->create_topology();
     topo->is_strongly_connected(topo);
 
     delete topo;
-    
+
+    /* File handling stuff */
+
 	return 0;
 }

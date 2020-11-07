@@ -21,14 +21,14 @@ class Topology;
 class TopologyUniverse {
 public:
     TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
-                     uint32_t mNumTopology,
-                     const std::vector<Topology *> &topologies);
-
+                     uint32_t mNumTopology);
+    void populate_unique_rings(std::vector<int> node_order);
 private:
     uint32_t m_num_nodes;
     uint32_t m_num_links;
     uint32_t m_num_topology;
-    std::vector<Topology*> topologies;
+    std::vector<Topology*> m_topologies;
+    std::vector<std::vector<int>> m_unique_rings;
 };
 
 /* One object per topology */
@@ -44,11 +44,14 @@ private:
     // move it to be private members (later)
     std::vector<Node*> nodes;
     std::vector<Link*> links;
+    std::vector<int> m_base_ring; // contains the order of nodes
     // each instance of Topology contains one underlying distinct ring
-    std::vector<std::vector<Node*>> ring_topology;
+    std::vector<std::vector<Node*>> m_ring_topology;
 public:
     Topology(); //default ctor
-    Topology(uint32_t num_nodes, uint32_t num_links);
+    Topology(uint32_t mNumNodes, uint32_t mNumLinks);
+    Topology(uint32_t mNumNodes, uint32_t mNumLinks,
+                       std::vector<int> mBaseRing);
     void create_topology();
     void set_params(int nodes, int links);
     bool is_strongly_connected(Topology* );
@@ -59,7 +62,7 @@ public:
     void set_num_links(int num_links) {
         m_num_links = num_links;
     }
-    void create_rings(std::vector<Node*> nodes_, int start, int end);
+    void create_ring();
     // Getter
     int get_num_nodes() {
         return m_num_nodes;
