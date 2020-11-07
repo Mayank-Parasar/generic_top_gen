@@ -41,6 +41,8 @@ private:
     std::vector<std::vector<int>> m_hop_matrix;
     // this contains the information of actual topology
     // column is 'src'-node (sender) and row is 'dest'-node(receiver)
+    // 'connectivity matrix' actually contains the link latency information
+    // currently assumed to be 1 for every link
     std::vector<std::vector<int>> m_connectivity_matrix;
     // move it to be private members (later)
     std::vector<Node*> nodes;
@@ -97,10 +99,11 @@ public:
 class Link {
 public:
     Link(); // default ctor
-    Link(int linkId, Node* srcNode, Node* destNode);
-    int link_id;
-    Node* src_node;
-    Node* dest_node;
+    Link(int linkId, Node *srcNode, Node *destNode, int mLinkLatency = 1);
+    int m_link_id;
+    int m_link_latency;
+    Node* m_src_node;
+    Node* m_dest_node;
 };
 
 #endif //GENERIC_TOPO_GEN_GENERIC_TOPO_GEN_H

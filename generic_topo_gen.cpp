@@ -67,7 +67,8 @@ Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
     }
     /* Creating Links */
     for (int link_id = 0; link_id < m_num_links; ++link_id) {
-        Link* link_ = new Link(link_id, nullptr, nullptr);
+        Link* link_ = new Link(link_id, nullptr,
+                               nullptr, 1);
         links.push_back(link_);
     }
 };
@@ -83,7 +84,8 @@ Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks)
     }
     /* Creating Links */
     for (int link_id = 0; link_id < m_num_links; ++link_id) {
-        Link* link_ = new Link(link_id, nullptr, nullptr);
+        Link* link_ = new Link(link_id, nullptr,
+                               nullptr, 1);
         links.push_back(link_);
     }
 };
@@ -96,16 +98,16 @@ Topology::create_ring() {
     for(int ii=0; ii < m_base_ring.size()-1; ii++) {
         nodes[m_base_ring[ii]]->outgoing_link.push_back(links[link_id]);
         nodes[m_base_ring[ii]]->incoming_link.push_back(links[link_id]);
-        links[link_id]->src_node = nodes[m_base_ring[ii]];
-        links[link_id]->dest_node = nodes[m_base_ring[ii+1]];
+        links[link_id]->m_src_node = nodes[m_base_ring[ii]];
+        links[link_id]->m_dest_node = nodes[m_base_ring[ii + 1]];
         link_id++;
     }
     // make it a ring here
     nodes[m_base_ring[m_base_ring.size()-1]]->outgoing_link.\
                                             push_back(links[link_id]);
     nodes[m_base_ring[0]]->incoming_link.push_back(links[link_id]);
-    links[link_id]->src_node = nodes[m_base_ring[m_base_ring.size()-1]];
-    links[link_id]->dest_node = nodes[m_base_ring[0]];
+    links[link_id]->m_src_node = nodes[m_base_ring[m_base_ring.size() - 1]];
+    links[link_id]->m_dest_node = nodes[m_base_ring[0]];
 
     return;
 }
@@ -118,13 +120,13 @@ Topology::create_topology() {
     int ii;
     for(ii=0; ii < m_num_nodes; ii++) {
         // connected to form the ring
-        assert(links[ii]->src_node != nullptr);
-        assert(links[ii]->dest_node != nullptr);
+        assert(links[ii]->m_src_node != nullptr);
+        assert(links[ii]->m_dest_node != nullptr);
     }
     for (ii = m_num_nodes; ii < m_num_links; ++ii) {
         // not connected yet
-        assert(links[ii]->src_node == nullptr);
-        assert(links[ii]->dest_node == nullptr);
+        assert(links[ii]->m_src_node == nullptr);
+        assert(links[ii]->m_dest_node == nullptr);
     }
 
     for (int link_id = m_num_nodes; link_id < m_num_links; ++link_id) {
@@ -142,8 +144,8 @@ Topology::create_topology() {
         nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
         nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
         /*update the same in the link pointer as well*/
-        links[link_id]->src_node = nodes[src_node_id];
-        links[link_id]->dest_node = nodes[dest_node_id];
+        links[link_id]->m_src_node = nodes[src_node_id];
+        links[link_id]->m_dest_node = nodes[dest_node_id];
         cout << "link-"<< link_id << " connects node(src): " << src_node_id
             << " to node(dest): " << dest_node_id << endl;
     }
@@ -152,7 +154,7 @@ Topology::create_topology() {
     for(int ii = 0; ii < m_num_nodes; ii++) {
         vector<int> v(m_num_nodes, 0); // all elements = 0
         for(auto k : nodes[ii]->outgoing_link)
-            v[k->dest_node->node_id] = 1;
+            v[k->m_dest_node->node_id] = k->m_link_latency;
         m_connectivity_matrix.push_back(v);
     }
 
@@ -206,7 +208,7 @@ bool Topology::is_connected(Node *src_node, Node *dest_node) {
     // check if dest-node has same link-id for incoming node
     for( auto i : src_node->outgoing_link) {
         for( auto k : dest_node->incoming_link) {
-            if(i->link_id == k->link_id)
+            if(i->m_link_id == k->m_link_id)
                 return true;
         }
     }
@@ -239,15 +241,16 @@ Node::Node(int nodeId, vector<Link*> outgoingLinks,
 
 // class-Link member definition
 Link::Link() {
-    link_id = -1;
-    src_node = nullptr;
-    dest_node = nullptr;
+    m_link_id = -1;
+    m_src_node = nullptr;
+    m_dest_node = nullptr;
 }
 
-Link::Link(int linkId, Node* srcNode, Node* destNode) {
-    link_id = linkId;
-    src_node = srcNode;
-    dest_node = destNode;
+Link::Link(int linkId, Node *srcNode, Node *destNode,
+           int mLinkLatency) {
+    m_link_id = linkId;
+    m_src_node = srcNode;
+    m_dest_node = destNode;
 }
 
 
