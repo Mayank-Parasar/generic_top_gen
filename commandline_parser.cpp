@@ -55,7 +55,8 @@ void Parser::printHelp(std::ostream& os) const {
         size_t spacePos  = 0;
         size_t lineWidth = 0;
         while (spacePos != std::string::npos) {
-            size_t nextspacePos = argument.mHelp.find_first_of(' ', spacePos + 1);
+            size_t nextspacePos =
+                    argument.mHelp.find_first_of(' ', spacePos + 1);
             sstr << argument.mHelp.substr(spacePos, nextspacePos - spacePos);
             lineWidth += nextspacePos - spacePos;
             spacePos = nextspacePos;

@@ -13,20 +13,42 @@
 
 class Node;
 class Link;
+class Topology;
 
+/* This class contains
+ * many automatically generated
+ * topologies */
+class TopologyUniverse {
+public:
+    TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
+                     uint32_t mNumTopology,
+                     const std::vector<Topology *> &topologies);
+
+private:
+    uint32_t m_num_nodes;
+    uint32_t m_num_links;
+    uint32_t m_num_topology;
+    std::vector<Topology*> topologies;
+};
+
+/* One object per topology */
 class Topology {
 
 private:
-    uint16_t m_num_nodes;
+    uint32_t m_num_nodes;
     uint32_t m_num_links;
+    // generate "avg-hop count"
     std::vector<std::vector<int>> hop_matrix;
+    // this contains the information of actual topology
+    std::vector<std::vector<int>> connectivity_matrix;
     // move it to be private members (later)
     std::vector<Node*> nodes;
     std::vector<Link*> links;
-    std::vector<std::vector<Node*>> ring_topologies;
+    // each instance of Topology contains one underlying distinct ring
+    std::vector<std::vector<Node*>> ring_topology;
 public:
     Topology(); //default ctor
-    Topology(uint16_t num_nodes, uint32_t num_links);
+    Topology(uint32_t num_nodes, uint32_t num_links);
     void create_topology();
     void set_params(int nodes, int links);
     bool is_strongly_connected(Topology* );
@@ -57,7 +79,8 @@ class Node {
 public:
     Node(); // default ctor
     Node(int nodeId, Link* outgoingLink, Link* incomingLink);
-    Node(int nodeId, std::vector<Link*> outgoingLinks, std::vector<Link*> incomingLinks);
+    Node(int nodeId, std::vector<Link*> outgoingLinks,
+         std::vector<Link*> incomingLinks);
 
     Node(int nodeId);
 

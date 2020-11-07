@@ -5,8 +5,19 @@
 #include "generic_topo_gen.h"
 
 using namespace  std;
-// class-Topology member definition
-Topology::Topology(uint16_t num_nodes, uint32_t num_links)
+
+// class-TopologyUniverse member-functions definitions
+TopologyUniverse::TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
+                                   uint32_t mNumTopology,
+                                   const vector<Topology *> &topologies)
+        : m_num_nodes(mNumNodes), m_num_links(mNumLinks),
+          m_num_topology(mNumTopology), topologies(topologies) {
+
+}
+
+
+// class-Topology member-functions definition
+Topology::Topology(uint32_t num_nodes, uint32_t num_links)
 : m_num_nodes(num_nodes), m_num_links(num_links)
 {
     // call the ctor of Nodes* and Link* class here
@@ -120,7 +131,8 @@ Node::Node(int nodeId, Link* outgoingLink, Link* incomingLink) {
     incoming_link.push_back(incomingLink);
 }
 
-Node::Node(int nodeId, vector<Link*> outgoingLinks, vector<Link*> incomingLinks) {
+Node::Node(int nodeId, vector<Link*> outgoingLinks,
+           vector<Link*> incomingLinks) {
     node_id = nodeId;
     for(auto i : outgoingLinks)
         outgoing_link.push_back(i);
@@ -140,3 +152,5 @@ Link::Link(int linkId, Node* srcNode, Node* destNode) {
     src_node = srcNode;
     dest_node = destNode;
 }
+
+
