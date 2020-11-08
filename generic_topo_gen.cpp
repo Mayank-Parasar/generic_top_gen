@@ -162,7 +162,6 @@ Topology::create_topology() {
     for (int src_node_id_ = 0; src_node_id_ < m_num_nodes; ++src_node_id_) {
         populate_hop_matrix(src_node_id_);
     }
-
     // hop matrix has been generated for this topology
     return;
 }
@@ -174,11 +173,52 @@ Topology::populate_hop_matrix(int source_node_id) {
      * using Dijkstra's algorithm
      * by finding the shortest path
      */
+    int dist[m_num_nodes]; // The output array.  dist[i] will hold the shortest
+    // distance from src to i
 
+    bool sptSet[m_num_nodes]; // sptSet[i] will be true if vertex i is included
+    // in shortest path tree or shortest distance from src to i is finalized
+
+    // Initialize all distances as INFINITE and stpSet[] as false
+    for (int i = 0; i < m_num_nodes; i++)
+        dist[i] = INT_MAX, sptSet[i] = false;
+
+    // Distance of source vertex from itself is always 0
+    dist[source_node_id] = 0;
+
+    // Find shortest path for all vertices
+    for (int count = 0; count < m_num_nodes - 1; count++) {
+        // Pick the minimum distance vertex from the set of vertices not
+        // yet processed. u is always equal to src in the first iteration.
+        int u = minDistance(dist, sptSet);
+
+        // Mark the picked vertex as processed
+        sptSet[u] = true;
+
+        // Update dist value of the adjacent vertices of the picked vertex.
+        for (int v = 0; v < m_num_nodes; v++)
+
+            // Update dist[v] only if is not in sptSet, there is an edge from
+            // u to v, and total weight of path from src to  v through u is
+            // smaller than current value of dist[v]
+            if (!sptSet[v] && m_connectivity_matrix[u][v] && dist[u] != INT_MAX
+                && dist[u] + m_connectivity_matrix[u][v] < dist[v])
+                dist[v] = dist[u] + m_connectivity_matrix[u][v];
+    }
+
+    vector<int> vect(dist, dist+m_num_nodes);
+    m_hop_matrix.push_back(vect);
     return;
 }
 int Topology::minDistance(int *dist, bool *sptSet) {
-    return 0;
+    // Initialize min value
+    int min = INT_MAX, min_index;
+
+    for (int v = 0; v < m_num_nodes; v++)
+        if (sptSet[v] == false && dist[v] <= min)
+            min = dist[v], min_index = v;
+
+    return min_index;
 }
 
 void
@@ -198,7 +238,7 @@ Topology::is_strongly_connected(Topology * t) {
      * to the node-0 after traversing all the links then
      * topology is strongly connected..
      * (Use a standard algorithm for finding
-     * if graph is SCC)
+     * if m_connectivity_matrix is SCC)
      * */
     return false;
 }
