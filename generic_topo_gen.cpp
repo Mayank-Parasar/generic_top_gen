@@ -13,7 +13,8 @@ TopologyUniverse::TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
           m_num_topology(mNumTopology)
           {}
 
-void TopologyUniverse::init_generic_topo_gen() {
+void
+TopologyUniverse::init_generic_topo_gen() {
     vector<int> node_order;
     for(int i = 0; i < m_num_nodes; i++) {
         node_order.push_back(i);
@@ -72,6 +73,10 @@ Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
                                nullptr, 1);
         links.push_back(link_);
     }
+    // start the process of generating a random topology and its associated
+    // data structure here..
+    create_ring(); // created a random ring
+    create_topology(); // generated a random topology, based on the ring created
 };
 
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks)
