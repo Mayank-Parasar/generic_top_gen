@@ -112,7 +112,8 @@ Topology::create_ring() {
     int link_id = 0; // start of link-ids
     for(int ii=0; ii < m_base_ring.size()-1; ii++) {
         nodes[m_base_ring[ii]]->outgoing_link.push_back(links[link_id]);
-        nodes[m_base_ring[ii]]->incoming_link.push_back(links[link_id]);
+        // ii + 1 was the bug
+        nodes[m_base_ring[ii + 1]]->incoming_link.push_back(links[link_id]);
         links[link_id]->m_src_node = nodes[m_base_ring[ii]];
         links[link_id]->m_dest_node = nodes[m_base_ring[ii + 1]];
         link_id++;
