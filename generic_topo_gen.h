@@ -50,8 +50,6 @@ private:
     std::vector<Node*> nodes;
     std::vector<Link*> links;
     std::vector<int> m_base_ring; // contains the order of nodes
-    // each instance of Topology contains one underlying distinct ring
-    std::vector<std::vector<Node*>> m_ring_topology;
 public:
     Topology(); //default ctor
     Topology(uint32_t mNumNodes, uint32_t mNumLinks);

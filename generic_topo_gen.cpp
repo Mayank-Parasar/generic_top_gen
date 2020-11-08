@@ -86,6 +86,7 @@ Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
     // data structure here..
     create_ring(); // created a random ring
     create_topology(); // generated a random topology, based on the ring created
+    return;
 };
 
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks)
@@ -103,6 +104,7 @@ Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks)
                                nullptr, 1);
         links.push_back(link_);
     }
+    return;
 };
 
 // This creates the base: m_ring_topology
@@ -138,6 +140,7 @@ Topology::create_topology() {
         // connected to form the ring
         assert(links[ii]->m_src_node != nullptr);
         assert(links[ii]->m_dest_node != nullptr);
+        assert(links[ii]->m_src_node->node_id == m_base_ring[ii]);
     }
     for (ii = m_num_nodes; ii < m_num_links; ++ii) {
         // not connected yet
@@ -259,8 +262,6 @@ Topology::is_strongly_connected(Topology * t) {
     return false;
 }
 
-
-
 const vector<Node *> &Topology::getNodes() const {
     return nodes;
 }
@@ -305,14 +306,14 @@ void Topology::print_topology() {
 // class-Node member definition
 Node::Node(int nodeId) {
     node_id = nodeId;
-//    outgoing_link = nullptr;
-//    incoming_link = nullptr;
+    return;
 }
 
 Node::Node(int nodeId, Link* outgoingLink, Link* incomingLink) {
     node_id = nodeId;
     outgoing_link.push_back(outgoingLink);
     incoming_link.push_back(incomingLink);
+    return;
 }
 
 Node::Node(int nodeId, vector<Link*> outgoingLinks,
@@ -322,6 +323,8 @@ Node::Node(int nodeId, vector<Link*> outgoingLinks,
         outgoing_link.push_back(i);
     for(auto i : incomingLinks)
         incoming_link.push_back(i);
+
+    return;
 }
 
 // class-Link member definition
@@ -329,6 +332,7 @@ Link::Link() {
     m_link_id = -1;
     m_src_node = nullptr;
     m_dest_node = nullptr;
+    return;
 }
 
 Link::Link(int linkId, Node *srcNode, Node *destNode,
@@ -337,6 +341,7 @@ Link::Link(int linkId, Node *srcNode, Node *destNode,
     m_link_latency = mLinkLatency;
     m_src_node = srcNode;
     m_dest_node = destNode;
+    return;
 }
 
 
