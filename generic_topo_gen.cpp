@@ -285,17 +285,18 @@ void Topology::print_topology() {
     cout << "Connectivity Matrix:" << endl;
     for(auto i : m_connectivity_matrix) {
         for (auto k : i) {
-            cout << k << " ";
+            cout << k << "\t";
         }
         cout << endl;
     }
     cout << "Hop Matrix: " << endl;
     for (auto i : m_hop_matrix) {
         for (auto k : i) {
-            cout << k << " ";
+            cout << k << "\t";
         }
+        cout << endl;
     }
-    cout << endl;
+//    cout << endl;
     return;
 }
 
@@ -332,6 +333,7 @@ Link::Link() {
 Link::Link(int linkId, Node *srcNode, Node *destNode,
            int mLinkLatency) {
     m_link_id = linkId;
+    m_link_latency = mLinkLatency;
     m_src_node = srcNode;
     m_dest_node = destNode;
 }
