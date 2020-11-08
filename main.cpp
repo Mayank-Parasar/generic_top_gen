@@ -14,6 +14,17 @@ using namespace  std;
  * 3. Link class
  * */
 
+// Utility functions:
+int fact(int n) {
+    int res = 1;
+    for (int i = 2; i <= n; i++)
+        res = res * i;
+    return res;
+}
+int nCr(int n, int r) {
+    return fact(n) / (fact(r) * fact(n - r));
+}
+
 int main(int argc, char *argv[])
 {
     std::boolalpha;
@@ -59,6 +70,12 @@ int main(int argc, char *argv[])
     if(num_nodes > num_links) {
         cout << "Number of nodes are greater than number of links, " \
                 "therefore a SCC topology is not possible" << endl;
+        exit(-1);
+    }
+    else if(num_links >= nCr(num_nodes, 2)) {
+        cout << "Number of links are greater than or equal to fully connected"
+                " topology: therefore only fully connected topology is "
+                "possible. Exiting! ";
         exit(-1);
     }
     else {
