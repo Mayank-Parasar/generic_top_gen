@@ -56,6 +56,15 @@ TopologyUniverse::populate_unique_rings(std::vector<int> node_order) {
         return;
 }
 
+void TopologyUniverse::print_universe() {
+    for (int mTopology = 0; mTopology < m_num_topology; ++mTopology) {
+        cout << "Printing Topology:: \t" << mTopology << endl;
+        m_topologies[mTopology]->print_topology();
+        cout << "\t*********************************" << endl;
+    }
+    return;
+}
+
 // class-Topology member-functions definition
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
                    vector<int> mBaseRing)
@@ -270,6 +279,24 @@ bool Topology::is_connected(Node *src_node, Node *dest_node) {
     }
     // if control comes here... return false (these nodes are not connected)
     return false;
+}
+
+void Topology::print_topology() {
+    cout << "Connectivity Matrix:" << endl;
+    for(auto i : m_connectivity_matrix) {
+        for (auto k : i) {
+            cout << k << " ";
+        }
+        cout << endl;
+    }
+    cout << "Hop Matrix: " << endl;
+    for (auto i : m_hop_matrix) {
+        for (auto k : i) {
+            cout << k << " ";
+        }
+    }
+    cout << endl;
+    return;
 }
 
 

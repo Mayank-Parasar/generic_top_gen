@@ -24,6 +24,7 @@ public:
                      uint32_t mNumTopology);
     void init_generic_topo_gen();
     void populate_unique_rings(std::vector<int> node_order);
+    void print_universe();
 private:
     uint32_t m_num_nodes;
     uint32_t m_num_links;
@@ -83,6 +84,7 @@ public:
     void populate_hop_matrix(int source_node_id);
     // helper function
     int minDistance(int dist[], bool sptSet[]);
+    void print_topology();
 };
 
 class Node {

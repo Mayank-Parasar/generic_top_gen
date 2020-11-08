@@ -36,12 +36,16 @@ int main(int argc, char *argv[])
     uint32_t    num_nodes = 0;
     uint32_t    num_links = 0;
     uint32_t    num_topology = 0;
+    uint32_t    verbosity_level = 0;
 
     // First configure all possible command line options.
     Parser parser("Customized C++ command line parser.");
     parser.addArgument({"-n", "--nodes"}, &num_nodes, "Number of Nodes in the topology");
     parser.addArgument({"-l", "--links"}, &num_links, "Number of links in the topology");
     parser.addArgument({"-t", "--topologies"}, &num_topology, "Number of topologies");
+    parser.addArgument({"-v", "--verbosity"},
+                       &verbosity_level, "Verbosity while running the tool, "
+                                         "for debug");
     parser.addArgument({"-h", "--help"}, &oPrintHelp,
                      "Print this help. Help can be printing by "
                      "setting oPrintHelp flag true at compile time! "
@@ -86,7 +90,14 @@ int main(int argc, char *argv[])
                                                       num_topology);
     universe->init_generic_topo_gen();
 
+    if (verbosity_level >= 1) {
+        universe->print_universe();
+    }
+
     /* File handling stuff */
+    /* use the universe to output the avg hop count
+     * from the application traffic pattern for each generated
+     * topology*/
 
 	return 0;
 }
