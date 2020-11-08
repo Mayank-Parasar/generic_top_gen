@@ -10,9 +10,12 @@ using namespace  std;
 TopologyUniverse::TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
                                    uint32_t mNumTopology)
         : m_num_nodes(mNumNodes), m_num_links(mNumLinks),
-          m_num_topology(mNumTopology) {
+          m_num_topology(mNumTopology)
+          {}
+
+void TopologyUniverse::init_generic_topo_gen() {
     vector<int> node_order;
-    for(int i = 0; i < mNumNodes; i++) {
+    for(int i = 0; i < m_num_nodes; i++) {
         node_order.push_back(i);
     }
     populate_unique_rings(node_order);
@@ -23,7 +26,6 @@ TopologyUniverse::TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
                                            m_unique_rings[mTopology]);
         m_topologies.push_back(topology_);
     }
-
 }
 
 void
@@ -52,7 +54,6 @@ TopologyUniverse::populate_unique_rings(std::vector<int> node_order) {
     else
         return;
 }
-
 
 // class-Topology member-functions definition
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,

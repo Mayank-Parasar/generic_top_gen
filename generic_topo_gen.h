@@ -22,6 +22,7 @@ class TopologyUniverse {
 public:
     TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
                      uint32_t mNumTopology);
+    void init_generic_topo_gen();
     void populate_unique_rings(std::vector<int> node_order);
 private:
     uint32_t m_num_nodes;

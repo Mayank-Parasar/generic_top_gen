@@ -82,16 +82,9 @@ int main(int argc, char *argv[])
         // continue building topology
     }
 
-    /* Create the topolo*/
-    /* Do this for each topology in a for loop */
-
-	Topology *topo = new Topology(num_nodes, num_links);
-    //    topo->set_params()
-    topo->create_ring();
-    topo->create_topology();
-    topo->is_strongly_connected(topo);
-
-    delete topo;
+    TopologyUniverse *universe = new TopologyUniverse(num_nodes, num_links,
+                                                      num_topology);
+    universe->init_generic_topo_gen();
 
     /* File handling stuff */
 
