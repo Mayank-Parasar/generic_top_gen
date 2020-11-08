@@ -79,7 +79,9 @@ public:
 
     void setNodes(const std::vector<Node *> &nodes);
 
-    void populate_hop_matrix();
+    void populate_hop_matrix(int source_node_id);
+    // helper function
+    int minDistance(int dist[], bool sptSet[]);
 };
 
 class Node {

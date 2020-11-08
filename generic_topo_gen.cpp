@@ -159,7 +159,26 @@ Topology::create_topology() {
     }
 
     // Generate hop matrix here as well
+    for (int src_node_id_ = 0; src_node_id_ < m_num_nodes; ++src_node_id_) {
+        populate_hop_matrix(src_node_id_);
+    }
+
+    // hop matrix has been generated for this topology
     return;
+}
+
+void
+Topology::populate_hop_matrix(int source_node_id) {
+    /*
+     * function populates the hop-matrix
+     * using Dijkstra's algorithm
+     * by finding the shortest path
+     */
+
+    return;
+}
+int Topology::minDistance(int *dist, bool *sptSet) {
+    return 0;
 }
 
 void
@@ -184,16 +203,7 @@ Topology::is_strongly_connected(Topology * t) {
     return false;
 }
 
-void
-Topology::populate_hop_matrix() {
-    /*
-     * function populates the hop-matrix
-     * using Dijkstra's algorithm
-     * by finding the shortest path
-     */
 
-    return;
-}
 
 const vector<Node *> &Topology::getNodes() const {
     return nodes;
