@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
     /*DO file handling first*/
     FileHandler *file = new FileHandler(1); // only 1 file allowed to open
-    file->OpenHandle(("input/"+input_file).c_str(), ios::in);
+    file->OpenHandle(("input/"+input_file).c_str(), fstream::in);
 
 
 

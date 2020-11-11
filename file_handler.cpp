@@ -3,6 +3,8 @@
 //
 
 #include "file_handler.h"
+using namespace  std;
+
 FileHandler::FileHandler()
         : MaxHandles(0), CurrentHandles(0), Handles(nullptr) {}
 
@@ -22,7 +24,12 @@ void FileHandler::OpenHandle(const char* file, std::ios_base::openmode mode)
             else
             {
                 Handles[i].open(file, mode);
-
+                char buffer[PATH_MAX];
+                if (getcwd(buffer, sizeof(buffer)) != nullptr) {
+                    printf("Current working directory : %s\n", buffer);
+                } else {
+                    perror("getcwd() error");
+                }
                 if(Handles[i].is_open()) // Check if successful
                 {
                     std::cout << "Success: " << file << " opened\n";
