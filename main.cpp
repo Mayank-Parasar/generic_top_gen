@@ -95,10 +95,45 @@ int main(int argc, char *argv[])
     file->OpenHandle(("input/"+input_file).c_str(), fstream::in);
 
     // FIXME: create better API
-    // Do file handling inside that API instead of her
+    // Do file handling inside that API instead of here
     string word;
     bool populate_matrix = false;
+    vector<vector<int>>* matrix;
+    int row = 0;
+    int col = 0;
     while (file->GetHandle(0)>> word) {
+
+        if (populate_matrix) {
+            cout << *matrix[row][col];
+            *matrix[row][col] = new int(stoi(word));
+            col++;
+            if (col == file->mat_size.back() &&
+                row < file->mat_size.back()){
+                col = 0;
+                row++;
+            }
+            if (col == file->mat_size.back() &&
+                row == file->mat_size.back()) {
+                col = 0;
+                row = 0;
+                populate_matrix = false; // This matrix has been populated
+                file->mat_ptr.push_back(matrix);
+            }
+        }
+        else if (!populate_matrix) {
+            if (word == "Application:" ||
+                word == "application:") {
+                file->GetHandle(0) >> word; // get the next 'word'
+                file->application_name.push_back(word);
+                file->GetHandle(0) >> word; // get the next 'word'
+                file->mat_size.push_back(stoi(word));
+                // allocate memory for new incoming matrix
+                matrix = new std::vector<std::vector<int>> (stoi(word)),
+                        std::vector<int> (stoi(word), 0);
+                // Now turn-on populating matrices
+                populate_matrix = true;
+            }
+        }
 
         cout << word << endl;
     }
