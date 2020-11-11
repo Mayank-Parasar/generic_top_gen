@@ -14,15 +14,11 @@ FileHandler::FileHandler(unsigned int handles)
 
 FileHandler::~FileHandler() { delete[] Handles; }
 
-void FileHandler::OpenHandle(const char* file, std::ios_base::openmode mode)
-{
-    if(CurrentHandles < MaxHandles) // Check if any handles available
-    {
-        for(unsigned int i = 0; i < MaxHandles; i++)
-        {
+void FileHandler::OpenHandle(const char* file, std::ios_base::openmode mode) {
+    if(CurrentHandles < MaxHandles) { // Check if any handles available
+        for(unsigned int i = 0; i < MaxHandles; i++) {
             if(GetHandle(i).is_open()) continue; // Find next free handle
-            else
-            {
+            else {
                 Handles[i].open(file, mode);
                 char buffer[PATH_MAX];
                 if (getcwd(buffer, sizeof(buffer)) != nullptr) {
@@ -30,8 +26,7 @@ void FileHandler::OpenHandle(const char* file, std::ios_base::openmode mode)
                 } else {
                     perror("getcwd() error");
                 }
-                if(Handles[i].is_open()) // Check if successful
-                {
+                if(Handles[i].is_open()) {// Check if successful
                     std::cout << "Success: " << file << " opened\n";
                     CurrentHandles++;
                 }
@@ -40,26 +35,21 @@ void FileHandler::OpenHandle(const char* file, std::ios_base::openmode mode)
             }
         }
     }
-    else
-    {
+    else {
         // POSSIBLE FEATURE - Expand amount of handles
         std::cout << "Error: All handles occupied\n";
     }
 }
 
-void FileHandler::CloseHandle(unsigned int id)
-{
-    if(id < MaxHandles) // Check if out of bounds
-    {
-        if(Handles[id].is_open()) // Check if handle is valid
-        {
+void FileHandler::CloseHandle(unsigned int id) {
+    if(id < MaxHandles) { // Check if out of bounds
+        if(Handles[id].is_open()) {// Check if handle is valid
             Handles[id].close();
             std::cout << "Handle " << id << " closed\n";
             CurrentHandles--;
             return;
         }
-        else
-        {
+        else {
             std::cout << "Invalid closure of handle " << id << "\n";
             return;
         }

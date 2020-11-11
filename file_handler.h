@@ -52,11 +52,11 @@ private:
     unsigned int MaxHandles;
     unsigned int CurrentHandles;
     std::fstream *Handles;
-    std::fstream& GetHandle(unsigned int id) { return Handles[id]; }
-    // it should contain the traffic for each application..
-    // a new object is created with applicaiton name and
-    // initializes that
 public:
+    // initializes that
+    // a new object is created with applicaiton name and
+    // it should contain the traffic for each application..
+    std::fstream& GetHandle(unsigned int id) { return Handles[id]; }
     // This is a vector of pointers to matrices of different
     // shape and sizes. Refer to the code in comment for usage[1].
     // This datavstructure will be populated by reading from file

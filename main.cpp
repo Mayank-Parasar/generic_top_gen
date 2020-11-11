@@ -94,6 +94,12 @@ int main(int argc, char *argv[])
     FileHandler *file = new FileHandler(1); // only 1 file allowed to open
     file->OpenHandle(("input/"+input_file).c_str(), fstream::in);
 
+    // FIXME: create better API
+    string word;
+    while (file->GetHandle(0)>> word) {
+        cout << word << endl;
+    }
+
 
 
     TopologyUniverse *universe = new TopologyUniverse(num_nodes, num_links,
