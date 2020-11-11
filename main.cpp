@@ -95,8 +95,11 @@ int main(int argc, char *argv[])
     file->OpenHandle(("input/"+input_file).c_str(), fstream::in);
 
     // FIXME: create better API
+    // Do file handling inside that API instead of her
     string word;
+    bool populate_matrix = false;
     while (file->GetHandle(0)>> word) {
+
         cout << word << endl;
     }
 
