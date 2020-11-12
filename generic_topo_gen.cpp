@@ -65,6 +65,10 @@ void TopologyUniverse::print_universe() {
     return;
 }
 
+const vector<Topology *> &TopologyUniverse::getMTopologies() const {
+    return m_topologies;
+}
+
 // class-Topology member-functions definition
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
                    vector<int> mBaseRing)
@@ -300,6 +304,10 @@ void Topology::print_topology() {
     }
 //    cout << endl;
     return;
+}
+
+const vector<std::vector<int>> &Topology::getMHopMatrix() const {
+    return m_hop_matrix;
 }
 
 

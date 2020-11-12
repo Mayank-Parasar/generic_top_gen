@@ -30,6 +30,10 @@ private:
     uint32_t m_num_links;
     uint32_t m_num_topology;
     std::vector<Topology*> m_topologies;
+public:
+    const std::vector<Topology *> &getMTopologies() const;
+
+private:
     std::vector<std::vector<int>> m_unique_rings;
 };
 
@@ -41,6 +45,10 @@ private:
     uint32_t m_num_links;
     // generate "avg-hop count"
     std::vector<std::vector<int>> m_hop_matrix;
+public:
+    const std::vector<std::vector<int>> &getMHopMatrix() const;
+
+private:
     // this contains the information of actual topology
     // column is 'src'-node (sender) and row is 'dest'-node(receiver)
     // 'connectivity matrix' actually contains the link latency information

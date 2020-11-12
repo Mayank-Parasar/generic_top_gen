@@ -27,6 +27,46 @@ int nCr(int n, int r) {
     return fact(n) / (fact(r) * fact(n - r));
 }
 
+//Utility functions:
+vector<vector<int>> dot_product(const vector<vector<int>>& mat1,
+                                const vector<vector<int>>& mat2) {
+    // Both matrices MUST match in dimensions..
+    assert(mat1.size() == mat2.size());
+    vector<vector<int>> result;
+    vector<int> result_;
+    for (int row_ = 0; row_ < mat1.size(); ++row_) {
+        for (int col_ = 0; col_ < mat1[row_].size(); ++col_) {
+            result_.push_back(mat1[row_][col_] * mat2[row_][col_]);
+        }
+        result.push_back(result_);
+        result_.clear();
+    }
+
+    return result;
+}
+
+uint64_t mat_sum (const vector<vector<int>>& mat) {
+    uint64_t sum = 0;
+    for (auto i : mat) {
+        for (auto k : i) {
+            sum += k;
+        }
+    }
+    return sum;
+}
+
+uint64_t mat_diagonal_sum(const vector<vector<int>>& mat) {
+    uint64_t sum = 0;
+    for (int row_ = 0; row_ < mat.size(); ++row_) {
+        for (int col_ = 0; col_ < mat[row_].size(); ++col_) {
+            if(row_ == col_) {
+                sum += mat[row_][col_];
+            }
+        }
+    }
+    return sum;
+}
+
 int main(int argc, char *argv[])
 {
     std::boolalpha;
@@ -98,26 +138,28 @@ int main(int argc, char *argv[])
     // Do file handling inside that API instead of here
     string word;
     bool populate_matrix = false;
-    vector<vector<int>>* matrix;
+    vector<vector<int>> matrix;
+    vector<int> vec;
     int row = 0;
     int col = 0;
     while (file->GetHandle(0)>> word) {
 
         if (populate_matrix) {
-            cout << *matrix[row][col];
-            *matrix[row][col] = new int(stoi(word));
+            vec.push_back(stoi(word));
             col++;
-            if (col == file->mat_size.back() &&
-                row < file->mat_size.back()){
+            if (col == (file->mat_size.back())) {
                 col = 0;
                 row++;
+                matrix.push_back(vec);
+                vec.clear(); // clear vec
             }
-            if (col == file->mat_size.back() &&
-                row == file->mat_size.back()) {
+            if ((col == 0) &&
+                row == (file->mat_size.back())){
                 col = 0;
                 row = 0;
                 populate_matrix = false; // This matrix has been populated
-                file->mat_ptr.push_back(matrix);
+                file->appl_matrix.push_back(matrix);
+                matrix.clear();
             }
         }
         else if (!populate_matrix) {
@@ -127,15 +169,11 @@ int main(int argc, char *argv[])
                 file->application_name.push_back(word);
                 file->GetHandle(0) >> word; // get the next 'word'
                 file->mat_size.push_back(stoi(word));
-                // allocate memory for new incoming matrix
-                matrix = new std::vector<std::vector<int>> (stoi(word)),
-                        std::vector<int> (stoi(word), 0);
                 // Now turn-on populating matrices
                 populate_matrix = true;
             }
         }
-
-        cout << word << endl;
+        // cout << word << endl;
     }
 
 
@@ -147,6 +185,26 @@ int main(int argc, char *argv[])
     if (verbosity_level >= 1) {
         universe->print_universe();
     }
+
+    // output the average hop-count for:
+    // 1. each topology AND
+    // 2. each traffic pattern.
+    vector<vector<int>> dot_product_mat;
+    for (int topo_itr = 0;
+         topo_itr < universe->getMTopologies().size(); ++topo_itr) {
+        for (int app_mat = 0; app_mat < file->appl_matrix.size(); ++app_mat) {
+            dot_product_mat.clear();
+            dot_product_mat = dot_product(universe->getMTopologies()
+                    [topo_itr]->getMHopMatrix(), file->appl_matrix[app_mat]);
+            uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
+            uint64_t sum_app_mat = mat_sum(file->appl_matrix[app_mat]) -
+                    mat_diagonal_sum(file->appl_matrix[app_mat]);
+            double average_hop_count = (double)sum_dot_product_mat/((double)
+            sum_app_mat);
+            cout << average_hop_count << endl;
+        }
+    }
+
 
     /* File handling stuff */
     /* use the universe to output the avg hop count
