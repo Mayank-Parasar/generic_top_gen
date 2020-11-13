@@ -17,13 +17,13 @@ using namespace  std;
  * */
 
 // Utility functions:
-int fact(int n) {
-    int res = 1;
+uint64_t fact(int n) {
+    uint64_t res = 1;
     for (int i = 2; i <= n; i++)
         res = res * i;
     return res;
 }
-int nCr(int n, int r) {
+uint64_t nCr(int n, int r) {
     return fact(n) / (fact(r) * fact(n - r));
 }
 
@@ -114,13 +114,16 @@ int main(int argc, char *argv[])
     cout << "num_links: " << num_links << endl;
     cout << "num_topologies: " << num_topology << endl;
 
+    cout << "Maximum number of links with given node count for fully "
+            "connected topology: " << (2 * nCr(num_nodes, 2)) << endl;
 
     if(num_nodes > num_links) {
         cout << "Number of nodes are greater than number of links, " \
                 "therefore a SCC topology is not possible" << endl;
         exit(-1);
     }
-    else if(num_links > (2 * nCr(num_nodes, 2))) { // uni-directional links
+    // it is an independent check
+    if(num_links > (2 * nCr(num_nodes, 2))) { // uni-directional links
         cout << "Number of links are greater than fully connected"
                 " topology: therefore only fully connected topology is "
                 "possible. Exiting! ";
@@ -193,14 +196,20 @@ int main(int argc, char *argv[])
     for (int topo_itr = 0;
          topo_itr < universe->getMTopologies().size(); ++topo_itr) {
         for (int app_mat = 0; app_mat < file->appl_matrix.size(); ++app_mat) {
+            
             dot_product_mat.clear();
+
             dot_product_mat = dot_product(universe->getMTopologies()
                     [topo_itr]->getMHopMatrix(), file->appl_matrix[app_mat]);
+
             uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
+
             uint64_t sum_app_mat = mat_sum(file->appl_matrix[app_mat]) -
                     mat_diagonal_sum(file->appl_matrix[app_mat]);
+
             double average_hop_count = (double)sum_dot_product_mat/((double)
             sum_app_mat);
+
             cout << average_hop_count << endl;
         }
     }
