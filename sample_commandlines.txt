@@ -1,0 +1,3 @@
+Sample commandline:
+---
+./generic_top_gen --nodes 16 --links 24 --topologies 10 --verbosity 2 --file inp1.txt
