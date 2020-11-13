@@ -120,8 +120,8 @@ int main(int argc, char *argv[])
                 "therefore a SCC topology is not possible" << endl;
         exit(-1);
     }
-    else if(num_links >= (2 * nCr(num_nodes, 2))) { // uni-directional links
-        cout << "Number of links are greater than or equal to fully connected"
+    else if(num_links > (2 * nCr(num_nodes, 2))) { // uni-directional links
+        cout << "Number of links are greater than fully connected"
                 " topology: therefore only fully connected topology is "
                 "possible. Exiting! ";
         exit(-1);
