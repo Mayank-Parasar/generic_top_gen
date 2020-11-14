@@ -17,6 +17,7 @@ private:
     unsigned int MaxHandles;
     unsigned int CurrentHandles;
     std::fstream *Handles;
+    bool m_debug;
 public:
     // initializes that
     // a new object is created with applicaiton name and
@@ -29,8 +30,8 @@ public:
     std::vector<std::vector<std::vector<int>>> appl_matrix;
     std::vector<string> application_name;
     std::vector<int> mat_size;
-    FileHandler();
-    FileHandler(unsigned int handles);
+    FileHandler(bool mDebug);
+    FileHandler(unsigned int handles, bool mDebug);
     ~FileHandler();
 
     void OpenHandle(const char* file, std::ios_base::openmode mode);

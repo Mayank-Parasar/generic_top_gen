@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
 
     // This variables can be set via the command line.
     bool        oPrintHelp = false;
+    bool        debug_print = false;
     uint32_t    num_nodes = 0;
     uint32_t    num_links = 0;
     uint32_t    num_topology = 0;
@@ -87,6 +88,10 @@ int main(int argc, char *argv[])
     parser.addArgument({"-t", "--topologies"}, &num_topology, "Number of topologies");
     parser.addArgument({"-f", "--file"}, &input_file, "input file name for "
                                                       "reading");
+    parser.addArgument({"-d", "--debug"}, &debug_print, "When set to true this "
+                                                      "enables debug "
+                                                      "messages, by default "
+                                                      "it is turned-off");
     parser.addArgument({"-v", "--verbosity"},
                        &verbosity_level, "Verbosity while running the tool, "
                                          "for debug");
@@ -134,7 +139,7 @@ int main(int argc, char *argv[])
     }
 
     /*DO file handling first*/
-    FileHandler *file = new FileHandler(1); // only 1 file allowed to open
+    FileHandler *file = new FileHandler(1, debug_print); // only 1 file allowed to open
     file->OpenHandle(("input/"+input_file).c_str(), fstream::in);
 
     // FIXME: create better API
@@ -182,7 +187,7 @@ int main(int argc, char *argv[])
 
 
     TopologyUniverse *universe = new TopologyUniverse(num_nodes, num_links,
-                                                      num_topology);
+                                                      num_topology, debug_print);
     universe->init_generic_topo_gen();
 
     if (verbosity_level >= 1) {

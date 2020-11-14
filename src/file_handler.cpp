@@ -5,12 +5,14 @@
 #include "file_handler.h"
 using namespace  std;
 
-FileHandler::FileHandler()
-        : MaxHandles(0), CurrentHandles(0), Handles(nullptr) {}
+FileHandler::FileHandler(bool mDebug)
+        : MaxHandles(0), CurrentHandles(0), Handles(nullptr) {
+    m_debug = mDebug;
+}
 
-FileHandler::FileHandler(unsigned int handles)
+FileHandler::FileHandler(unsigned int handles, bool mDebug)
         : MaxHandles(handles), CurrentHandles(0),
-        Handles(new std::fstream[handles]) {}
+        Handles(new std::fstream[handles]), m_debug(mDebug) {}
 
 FileHandler::~FileHandler() { delete[] Handles; }
 
@@ -22,12 +24,16 @@ void FileHandler::OpenHandle(const char* file, std::ios_base::openmode mode) {
                 Handles[i].open(file, mode);
                 char buffer[PATH_MAX];
                 if (getcwd(buffer, sizeof(buffer)) != nullptr) {
-                    printf("Current working directory : %s\n", buffer);
+                    if (m_debug) {
+                        printf("Current working directory : %s\n", buffer);
+                    }
                 } else {
                     perror("getcwd() error");
                 }
-                if(Handles[i].is_open()) {// Check if successful
-                    std::cout << "Success: " << file << " opened\n";
+                if(Handles[i].is_open()) {  // Check if successful
+                    if(m_debug) {
+                        std::cout << "Success: " << file << " opened\n";
+                    }
                     CurrentHandles++;
                 }
                 else std::cout << "Error: " << file << " could not be opened\n";

@@ -1,78 +1,14 @@
 //
-// Created by Mayank Parasar on 11/1/20.
+// Created by Mayank Parasar on 11/13/20.
 //
 
-#include "generic_topo_gen.h"
-
+#include "Topology.h"
 using namespace  std;
-
-// class-TopologyUniverse member-functions definitions
-TopologyUniverse::TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
-                                   uint32_t mNumTopology)
-        : m_num_nodes(mNumNodes), m_num_links(mNumLinks),
-          m_num_topology(mNumTopology)
-          {}
-
-void
-TopologyUniverse::init_generic_topo_gen() {
-    vector<int> node_order;
-    for(int i = 0; i < m_num_nodes; i++) {
-        node_order.push_back(i);
-    }
-    populate_unique_rings(node_order);
-    // By now all the unique rings have been populated.
-    // for 'm_num_topology' distribute one base-ring instance for each
-    for (uint32_t mTopology = 0; mTopology < m_num_topology; ++mTopology) {
-        Topology *topology_ = new Topology(m_num_nodes, m_num_links,
-                                           m_unique_rings[mTopology]);
-        m_topologies.push_back(topology_);
-    }
-}
-
-void
-TopologyUniverse::populate_unique_rings(std::vector<int> node_order) {
-    srand((unsigned) time(0));
-    int sizeOfVector = node_order.size();
-    // shuffle
-    shuffle:
-    /* Fisher-Yates shuffle algorithm */
-    for (int k = 0; k < sizeOfVector; k++) {
-        int r = k + rand() % (sizeOfVector - k); // careful here!
-        swap(node_order[k], node_order[r]);
-    }
-    // check
-    for(int i = 0; i < node_order.size(); i++) {
-        rotate(node_order.begin(), node_order.begin()+1, node_order.end());
-        for(auto i : m_unique_rings)
-            if (i == node_order)
-                goto shuffle;
-    }
-    //store
-    if(m_unique_rings.size() < m_num_topology) {
-        m_unique_rings.push_back(node_order);
-        goto shuffle;
-    }
-    else
-        return;
-}
-
-void TopologyUniverse::print_universe() {
-    for (int mTopology = 0; mTopology < m_num_topology; ++mTopology) {
-        cout << "Printing Topology:: \t" << mTopology << endl;
-        m_topologies[mTopology]->print_topology();
-        cout << "\t*********************************" << endl;
-    }
-    return;
-}
-
-const vector<Topology *> &TopologyUniverse::getMTopologies() const {
-    return m_topologies;
-}
-
 // class-Topology member-functions definition
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
-                   vector<int> mBaseRing)
-        : m_num_nodes(mNumNodes), m_num_links(mNumLinks), m_base_ring(mBaseRing)
+                   vector<int> mBaseRing, bool mDebug)
+        : m_num_nodes(mNumNodes), m_num_links(mNumLinks),
+        m_base_ring(mBaseRing), m_debug(mDebug)
 {
     // call the ctor of Nodes* and Link* class here
     /* Creating nodes */
@@ -94,7 +30,7 @@ Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
 };
 
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks)
-: m_num_nodes(mNumNodes), m_num_links(mNumLinks)
+        : m_num_nodes(mNumNodes), m_num_links(mNumLinks)
 {
     // call the ctor of Nodes* and Link* class here
     /* Creating nodes */
@@ -169,8 +105,10 @@ Topology::create_topology() {
         /*update the same in the link pointer as well*/
         links[link_id]->m_src_node = nodes[src_node_id];
         links[link_id]->m_dest_node = nodes[dest_node_id];
-        cout << "link-"<< link_id << " connects node(src): " << src_node_id
-            << " to node(dest): " << dest_node_id << endl;
+        if (m_debug) {
+            cout << "link-" << link_id << " connects node(src): " << src_node_id
+                 << " to node(dest): " << dest_node_id << endl;
+        }
     }
     // Also generates the connectivity matrix here..
     // column is 'src'-node (sender) and row is 'dest'-node(receiver)
@@ -309,47 +247,3 @@ void Topology::print_topology() {
 const vector<std::vector<int>> &Topology::getMHopMatrix() const {
     return m_hop_matrix;
 }
-
-
-// class-Node member definition
-Node::Node(int nodeId) {
-    node_id = nodeId;
-    return;
-}
-
-Node::Node(int nodeId, Link* outgoingLink, Link* incomingLink) {
-    node_id = nodeId;
-    outgoing_link.push_back(outgoingLink);
-    incoming_link.push_back(incomingLink);
-    return;
-}
-
-Node::Node(int nodeId, vector<Link*> outgoingLinks,
-           vector<Link*> incomingLinks) {
-    node_id = nodeId;
-    for(auto i : outgoingLinks)
-        outgoing_link.push_back(i);
-    for(auto i : incomingLinks)
-        incoming_link.push_back(i);
-
-    return;
-}
-
-// class-Link member definition
-Link::Link() {
-    m_link_id = -1;
-    m_src_node = nullptr;
-    m_dest_node = nullptr;
-    return;
-}
-
-Link::Link(int linkId, Node *srcNode, Node *destNode,
-           int mLinkLatency) {
-    m_link_id = linkId;
-    m_link_latency = mLinkLatency;
-    m_src_node = srcNode;
-    m_dest_node = destNode;
-    return;
-}
-
-

@@ -3,5 +3,6 @@ project(generic_topo_gen)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(generic_topo_gen main.cpp generic_topo_gen.cpp generic_topo_gen.h
-        commandline_parser.cpp commandline_parser.h file_handler.cpp file_handler.h)
+add_executable(generic_topo_gen src/main.cpp src/generic_topo_gen.cpp src/generic_topo_gen.h
+        src/commandline_parser.cpp src/commandline_parser.h src/file_handler.cpp src/file_handler.h
+        src/Topology.cpp src/Topology.h src/Node.cpp src/Node.h src/Link.cpp src/Link.h)

@@ -1,41 +1,13 @@
 //
-// Created by Mayank Parasar on 11/1/20.
+// Created by Mayank Parasar on 11/13/20.
 //
 
-#ifndef GENERIC_TOPO_GEN_GENERIC_TOPO_GEN_H
-#define GENERIC_TOPO_GEN_GENERIC_TOPO_GEN_H
-
-#include <cstdint>
-#include <iostream>
+#ifndef GENERIC_TOPO_GEN_TOPOLOGY_H
+#define GENERIC_TOPO_GEN_TOPOLOGY_H
 #include <vector>
-#include <cstdlib> // for rand() and srand()
-#include <ctime> // for time()
-
-class Node;
-class Link;
-class Topology;
-
-/* This class contains
- * many automatically generated
- * topologies */
-class TopologyUniverse {
-public:
-    TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
-                     uint32_t mNumTopology);
-    void init_generic_topo_gen();
-    void populate_unique_rings(std::vector<int> node_order);
-    void print_universe();
-private:
-    uint32_t m_num_nodes;
-    uint32_t m_num_links;
-    uint32_t m_num_topology;
-    std::vector<Topology*> m_topologies;
-public:
-    const std::vector<Topology *> &getMTopologies() const;
-
-private:
-    std::vector<std::vector<int>> m_unique_rings;
-};
+#include <iostream>
+#include "Node.h"
+#include "Link.h"
 
 /* One object per topology */
 class Topology {
@@ -45,6 +17,7 @@ private:
     uint32_t m_num_links;
     // generate "avg-hop count"
     std::vector<std::vector<int>> m_hop_matrix;
+
 public:
     const std::vector<std::vector<int>> &getMHopMatrix() const;
 
@@ -58,11 +31,12 @@ private:
     std::vector<Node*> nodes;
     std::vector<Link*> links;
     std::vector<int> m_base_ring; // contains the order of nodes
+    bool m_debug;
 public:
     Topology(); //default ctor
     Topology(uint32_t mNumNodes, uint32_t mNumLinks);
     Topology(uint32_t mNumNodes, uint32_t mNumLinks,
-                       std::vector<int> mBaseRing);
+             std::vector<int> mBaseRing, bool mDebug);
     void create_topology();
     void set_params(int nodes, int links);
     bool is_connected(Node* src_node, Node* dest_node);
@@ -92,29 +66,4 @@ public:
     int minDistance(int dist[], bool sptSet[]);
     void print_topology();
 };
-
-class Node {
-public:
-    Node(); // default ctor
-    Node(int nodeId, Link* outgoingLink, Link* incomingLink);
-    Node(int nodeId, std::vector<Link*> outgoingLinks,
-         std::vector<Link*> incomingLinks);
-
-    Node(int nodeId);
-
-    int node_id;
-    std::vector<Link*> outgoing_link;
-    std::vector<Link*> incoming_link;
-};
-
-class Link {
-public:
-    Link(); // default ctor
-    Link(int linkId, Node *srcNode, Node *destNode, int mLinkLatency = 1);
-    int m_link_id;
-    int m_link_latency;
-    Node* m_src_node;
-    Node* m_dest_node;
-};
-
-#endif //GENERIC_TOPO_GEN_GENERIC_TOPO_GEN_H
+#endif //GENERIC_TOPO_GEN_TOPOLOGY_H
