@@ -200,22 +200,24 @@ int main(int argc, char *argv[])
     vector<vector<int>> dot_product_mat;
     for (int topo_itr = 0;
          topo_itr < universe->getMTopologies().size(); ++topo_itr) {
-        for (int app_mat = 0; app_mat < file->appl_matrix.size(); ++app_mat) {
+        for (int appMat_itr = 0; appMat_itr < file->appl_matrix.size(); ++appMat_itr) {
             
             dot_product_mat.clear();
 
             dot_product_mat = dot_product(universe->getMTopologies()
-                    [topo_itr]->getMHopMatrix(), file->appl_matrix[app_mat]);
+                    [topo_itr]->getMHopMatrix(), file->appl_matrix[appMat_itr]);
 
             uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
 
-            uint64_t sum_app_mat = mat_sum(file->appl_matrix[app_mat]) -
-                    mat_diagonal_sum(file->appl_matrix[app_mat]);
+            uint64_t sum_app_mat = mat_sum(file->appl_matrix[appMat_itr]) -
+                                   mat_diagonal_sum(file->appl_matrix[appMat_itr]);
 
             double average_hop_count = (double)sum_dot_product_mat/((double)
             sum_app_mat);
 
-            cout << average_hop_count << endl;
+            cout << "Application: " << file->application_name[appMat_itr] <<
+            "\tTopology-ID: " << topo_itr << ":\t" <<
+                 average_hop_count << endl;
         }
     }
 

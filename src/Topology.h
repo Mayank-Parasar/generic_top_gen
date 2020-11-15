@@ -66,4 +66,9 @@ public:
     int minDistance(int dist[], bool sptSet[]);
     void print_topology();
 };
+
+class Mesh : public Topology {
+    // buit the connectivity matrix in the ctor
+};
+
 #endif //GENERIC_TOPO_GEN_TOPOLOGY_H
