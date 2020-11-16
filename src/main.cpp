@@ -78,13 +78,22 @@ int main(int argc, char *argv[])
     bool        debug_print = false;
     uint32_t    num_nodes = 0;
     uint32_t    num_links = 0;
+    uint32_t    num_rows = 0;   // number of rows in a Mesh
+    uint32_t    num_cols = 0;   // number of columns in a Mesh
     uint32_t    num_topology = 0;
     uint32_t    verbosity_level = 0;
     string      input_file;
+    string      spl_topology = "None";
     // First configure all possible command line options.
     Parser parser("Customized C++ command line parser.");
     parser.addArgument({"-n", "--nodes"}, &num_nodes, "Number of Nodes in the topology");
     parser.addArgument({"-l", "--links"}, &num_links, "Number of links in the topology");
+    parser.addArgument({"-r", "--rows"}, &num_links, "Number of rows in the"
+                                                      " Mesh topology");
+    parser.addArgument({"-c", "--cols"}, &num_links, "Number of columns in the"
+                                                     " Mesh topology");
+    parser.addArgument({"-st", "--topology"}, &spl_topology,
+                       "Special topology such as Mesh, Torus, DragonFly, etc");
     parser.addArgument({"-t", "--topologies"}, &num_topology, "Number of topologies");
     parser.addArgument({"-f", "--file"}, &input_file, "input file name for "
                                                       "reading");

@@ -6,6 +6,7 @@
 #define GENERIC_TOPO_GEN_TOPOLOGY_H
 #include <vector>
 #include <iostream>
+#include <cassert>
 #include "Node.h"
 #include "Link.h"
 
@@ -68,7 +69,16 @@ public:
 };
 
 class Mesh : public Topology {
-    // buit the connectivity matrix in the ctor
+private:
+    uint32_t m_rows;
+    uint32_t m_cols;
+public:
+    // build the connectivity matrix in the ctor
+    Mesh(uint32_t mNumNodes, uint32_t mNumLinks,
+         const std::vector<int> &mBaseRing, bool mDebug);
+
+    Mesh(uint32_t mNumNodes, uint32_t mNumLinks,
+         uint32_t mNumRows, uint32_t mNumCols);
 };
 
 #endif //GENERIC_TOPO_GEN_TOPOLOGY_H

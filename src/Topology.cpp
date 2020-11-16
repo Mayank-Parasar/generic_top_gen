@@ -247,3 +247,24 @@ void Topology::print_topology() {
 const vector<std::vector<int>> &Topology::getMHopMatrix() const {
     return m_hop_matrix;
 }
+
+Mesh::Mesh(uint32_t mNumNodes, uint32_t mNumLinks, const vector<int> &mBaseRing,
+           bool mDebug) : Topology(mNumNodes, mNumLinks, mBaseRing, mDebug) {
+    // not used
+    assert(0 && "This is not the right constructor to call to create Mesh "
+                "Object"
+          "Mesh objects are created independently from TopologyUniverse class");
+
+}
+
+Mesh::Mesh(uint32_t mNumNodes, uint32_t mNumLinks, uint32_t mNumRows,
+           uint32_t mNumCols) : Topology(mNumNodes,
+                                         mNumLinks) {
+    m_rows = mNumRows;
+    m_cols = mNumCols;
+    // Nodes and links objects have been populated now...
+    // Connect them in the form of 'Mesh' here
+    // Then,
+    // Generate the connectivity matrix here..
+}
+
