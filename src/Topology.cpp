@@ -248,23 +248,146 @@ const vector<std::vector<int>> &Topology::getMHopMatrix() const {
     return m_hop_matrix;
 }
 
+Topology::Topology() {
+    // default
+}
+
 Mesh::Mesh(uint32_t mNumNodes, uint32_t mNumLinks, const vector<int> &mBaseRing,
            bool mDebug) : Topology(mNumNodes, mNumLinks, mBaseRing, mDebug) {
     // not used
     assert(0 && "This is not the right constructor to call to create Mesh "
-                "Object"
-          "Mesh objects are created independently from TopologyUniverse class");
+                "Object Mesh objects are created independently from "
+                "TopologyUniverse class");
 
 }
 
 Mesh::Mesh(uint32_t mNumNodes, uint32_t mNumLinks, uint32_t mNumRows,
            uint32_t mNumCols) : Topology(mNumNodes,
                                          mNumLinks) {
+    // not used
+    assert(0 && "This is not the right constructor to call to create Mesh "
+                "Object Mesh objects are created independently from "
+                "TopologyUniverse class");
     m_rows = mNumRows;
     m_cols = mNumCols;
     // Nodes and links objects have been populated now...
     // Connect them in the form of 'Mesh' here
     // Then,
     // Generate the connectivity matrix here..
+}
+
+Mesh::Mesh(uint32_t mRows, uint32_t mCols) : m_rows(mRows), m_cols(mCols) {
+    m_num_nodes = m_rows * m_cols; // Number of Nodes in Mesh Topology
+    // Number of links in Mesh topology (uni-directional)
+    m_num_links = 2* ((m_rows - 1) * m_cols + m_rows * (m_cols - 1));
+    // call the ctor of Nodes* and Link* class here
+    /* Creating nodes */
+    for (int node_id = 0; node_id < m_num_nodes; ++node_id) {
+        Node* node_ = new Node(node_id);
+        nodes.push_back(node_);
+    }
+    /* Creating Links */
+    for (int link_id = 0; link_id < m_num_links; ++link_id) {
+        Link* link_ = new Link(link_id, nullptr,
+                               nullptr, 1);
+        links.push_back(link_);
+    }
+
+    create_mesh();
+    // Generate connectivity Matrix here
+    // column is 'src'-node (sender) and row is 'dest'-node(receiver)
+    for(int ii = 0; ii < m_num_nodes; ii++) {
+        vector<int> v(m_num_nodes, 0); // all elements = 0
+        for(auto k : nodes[ii]->outgoing_link)
+            v[k->m_dest_node->node_id] = k->m_link_latency;
+        m_connectivity_matrix.push_back(v);
+    }
+
+    // Generate hop matrix here as well
+    for (int src_node_id_ = 0; src_node_id_ < m_num_nodes; ++src_node_id_) {
+        populate_hop_matrix(src_node_id_);
+    }
+
+    return;
+}
+
+void Mesh::create_mesh() {
+
+    int link_id = 0;
+    int src_node_id = -1;
+    int dest_node_id = -1;
+
+    // (East to West)-links
+    for (int row_ = 0; row_ < m_rows; ++row_) {
+        for (int col_ = 0; col_ < m_cols; ++col_) {
+            if(col_ + 1 < m_cols) {
+                src_node_id = col_ + (row_ * m_cols);
+                dest_node_id = col_+ 1 + (row_ * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+        }
+    }
+
+    // (West to East)-links
+    for (int row_ = 0; row_ < m_rows; ++row_) {
+        for (int col_ = 0; col_ < m_cols; ++col_) {
+            if(col_ + 1 < m_cols) {
+                dest_node_id = col_ + (row_ * m_cols);
+                src_node_id = (col_+ 1) + (row_ * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+        }
+    }
+
+    // (North to South)-links
+    for (int col_ = 0; col_ < m_cols; ++col_) {
+        for (int row_ = 0; row_ < m_rows; ++row_) {
+            if (row_ + 1 < m_rows) {
+                src_node_id = col_ + (row_ * m_cols);
+                dest_node_id = col_ + ((row_+1) * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+
+        }
+    }
+
+    // (South to North)-links
+    for (int col_ = 0; col_ < m_cols; ++col_) {
+        for (int row_ = 0; row_ < m_rows; ++row_) {
+            if (row_ + 1 < m_rows) {
+                dest_node_id = col_ + (row_ * m_cols);
+                src_node_id = col_ + ((row_+1) * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+        }
+    }
+
+    assert(link_id == (m_num_links));
+
+    return;
 }
 

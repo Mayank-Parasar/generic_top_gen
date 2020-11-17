@@ -88,9 +88,9 @@ int main(int argc, char *argv[])
     Parser parser("Customized C++ command line parser.");
     parser.addArgument({"-n", "--nodes"}, &num_nodes, "Number of Nodes in the topology");
     parser.addArgument({"-l", "--links"}, &num_links, "Number of links in the topology");
-    parser.addArgument({"-r", "--rows"}, &num_links, "Number of rows in the"
+    parser.addArgument({"-r", "--rows"}, &num_rows, "Number of rows in the"
                                                       " Mesh topology");
-    parser.addArgument({"-c", "--cols"}, &num_links, "Number of columns in the"
+    parser.addArgument({"-c", "--cols"}, &num_cols, "Number of columns in the"
                                                      " Mesh topology");
     parser.addArgument({"-st", "--topology"}, &spl_topology,
                        "Special topology such as Mesh, Torus, DragonFly, etc");
@@ -127,6 +127,13 @@ int main(int argc, char *argv[])
     cout << "num_nodes: " << num_nodes << endl;
     cout << "num_links: " << num_links << endl;
     cout << "num_topologies: " << num_topology << endl;
+    cout << "Special topology: " << spl_topology << endl;
+    cout << "num_rows: " << num_rows << endl;
+    cout << "num_cols: " << num_cols << endl;
+
+    if (num_rows != 0 && num_cols != 0) {
+        num_nodes = num_rows * num_cols;
+    }
 
     cout << "Maximum number of links with given node count for fully "
             "connected topology: " << (2 * nCr(num_nodes, 2)) << endl;
@@ -193,7 +200,38 @@ int main(int argc, char *argv[])
         // cout << word << endl;
     }
 
+    // Clean up the priting of results later..
+    // FIXME: flow of the code needs to be streamlined
+    if (spl_topology == "Mesh" ||
+        spl_topology == "mesh") {
 
+        Mesh *mesh = new Mesh(num_rows, num_cols);
+        if (verbosity_level >= 1) {
+            mesh->print_topology();
+        }
+        vector<vector<int>> dot_product_mat;
+        for (int appMat_itr = 0; appMat_itr < file->appl_matrix.size(); ++appMat_itr) {
+
+            dot_product_mat.clear();
+
+            dot_product_mat = dot_product(mesh->getMHopMatrix(),
+                                          file->appl_matrix[appMat_itr]);
+
+            uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
+
+            uint64_t sum_app_mat = mat_sum(file->appl_matrix[appMat_itr]) -
+                                   mat_diagonal_sum(file->appl_matrix[appMat_itr]);
+
+            double average_hop_count = (double)sum_dot_product_mat/((double)
+                    sum_app_mat);
+
+            cout << "Application: " << file->application_name[appMat_itr] <<
+                 "\tTopology-Mesh: " << ":\t" <<
+                 average_hop_count << endl;
+        }
+
+        return 0;
+    }
 
     TopologyUniverse *universe = new TopologyUniverse(num_nodes, num_links,
                                                       num_topology, debug_print);

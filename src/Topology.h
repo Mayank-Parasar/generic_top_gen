@@ -13,7 +13,7 @@
 /* One object per topology */
 class Topology {
 
-private:
+protected:
     uint32_t m_num_nodes;
     uint32_t m_num_links;
     // generate "avg-hop count"
@@ -22,7 +22,7 @@ private:
 public:
     const std::vector<std::vector<int>> &getMHopMatrix() const;
 
-private:
+protected:
     // this contains the information of actual topology
     // column is 'src'-node (sender) and row is 'dest'-node(receiver)
     // 'connectivity matrix' actually contains the link latency information
@@ -79,6 +79,10 @@ public:
 
     Mesh(uint32_t mNumNodes, uint32_t mNumLinks,
          uint32_t mNumRows, uint32_t mNumCols);
+
+    Mesh(uint32_t mRows, uint32_t mCols);
+
+    void create_mesh();
 };
 
 #endif //GENERIC_TOPO_GEN_TOPOLOGY_H
