@@ -85,4 +85,15 @@ public:
     void create_mesh();
 };
 
+class Torus : public Topology {
+private:
+    uint32_t m_rows;
+    uint32_t m_cols;
+public:
+    // build the connectivity matrix in the ctor
+    Torus(uint32_t mRows, uint32_t mCols);
+
+    void create_torus();
+};
+
 #endif //GENERIC_TOPO_GEN_TOPOLOGY_H

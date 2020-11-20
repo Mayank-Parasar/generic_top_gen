@@ -391,3 +391,165 @@ void Mesh::create_mesh() {
     return;
 }
 
+Torus::Torus(uint32_t mRows, uint32_t mCols) : m_rows(mRows), m_cols(mCols) {
+    m_num_nodes = m_rows * m_cols; // Number of Nodes in Torus Topology
+    // Number of links in Torus topology (uni-directional)
+    m_num_links = 2 * ((m_rows * m_cols) + (m_rows * m_cols));
+    // call the ctor of Nodes* and Link* class here
+    /* Creating nodes */
+    for (int node_id = 0; node_id < m_num_nodes; ++node_id) {
+        Node* node_ = new Node(node_id);
+        nodes.push_back(node_);
+    }
+    /* Creating Links */
+    for (int link_id = 0; link_id < m_num_links; ++link_id) {
+        Link* link_ = new Link(link_id, nullptr,
+                               nullptr, 1);
+        links.push_back(link_);
+    }
+
+    create_torus();
+    // Generate connectivity Matrix here
+    // column is 'src'-node (sender) and row is 'dest'-node(receiver)
+    for(int ii = 0; ii < m_num_nodes; ii++) {
+        vector<int> v(m_num_nodes, 0); // all elements = 0
+        for(auto k : nodes[ii]->outgoing_link)
+            v[k->m_dest_node->node_id] = k->m_link_latency;
+        m_connectivity_matrix.push_back(v);
+    }
+
+    // Generate hop matrix here as well
+    for (int src_node_id_ = 0; src_node_id_ < m_num_nodes; ++src_node_id_) {
+        populate_hop_matrix(src_node_id_);
+    }
+
+    return;
+}
+
+void Torus::create_torus() {
+
+    int link_id = 0;
+    int src_node_id = -1;
+    int dest_node_id = -1;
+
+    // (East to West)-links
+    for (int row_ = 0; row_ < m_rows; ++row_) {
+        for (int col_ = 0; col_ < m_cols; ++col_) {
+            if(col_ + 1 < m_cols) {
+                src_node_id = col_ + (row_ * m_cols);
+                dest_node_id = col_+ 1 + (row_ * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+            // Add wrap-around link here
+            if (col_ + 1 == m_cols) {
+                src_node_id = col_ + (row_ * m_cols);
+                dest_node_id = (row_ * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+        }
+    }
+
+    // (West to East)-links
+    for (int row_ = 0; row_ < m_rows; ++row_) {
+        for (int col_ = 0; col_ < m_cols; ++col_) {
+            if(col_ + 1 < m_cols) {
+                dest_node_id = col_ + (row_ * m_cols);
+                src_node_id = (col_+ 1) + (row_ * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+            // Add wrap-around link here
+            if (col_ + 1 == m_cols) {
+                dest_node_id = col_ + (row_ * m_cols);
+                src_node_id = (row_ * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+        }
+    }
+
+    // (North to South)-links
+    for (int col_ = 0; col_ < m_cols; ++col_) {
+        for (int row_ = 0; row_ < m_rows; ++row_) {
+            if (row_ + 1 < m_rows) {
+                src_node_id = col_ + (row_ * m_cols);
+                dest_node_id = col_ + ((row_+1) * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+            // Add wrap around link here
+            if (row_ + 1 == m_rows) {
+                src_node_id = col_ + (row_ * m_cols);
+                dest_node_id = col_;
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+        }
+    }
+
+    // (South to North)-links
+    for (int col_ = 0; col_ < m_cols; ++col_) {
+        for (int row_ = 0; row_ < m_rows; ++row_) {
+            if (row_ + 1 < m_rows) {
+                dest_node_id = col_ + (row_ * m_cols);
+                src_node_id = col_ + ((row_+1) * m_cols);
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+            // Add wrap around link here
+            if (row_ + 1 == m_rows) {
+                dest_node_id = col_ + (row_ * m_cols);
+                src_node_id = col_;
+                assert(links[link_id] != nullptr);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                /*update the same in the link pointer as well*/
+                links[link_id]->m_src_node = nodes[src_node_id];
+                links[link_id]->m_dest_node = nodes[dest_node_id];
+                link_id++;
+            }
+        }
+    }
+
+    assert(link_id == (m_num_links));
+
+    return;
+}
+

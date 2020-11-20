@@ -67,6 +67,41 @@ uint64_t mat_diagonal_sum(const vector<vector<int>>& mat) {
     return sum;
 }
 
+enum topology_name {
+    invalid_ = 0,
+    mesh_ = 1,
+    torus_ = 2,
+    flattened_butterfly_ = 3,
+    dragonfly_ = 4,
+    random_ = 5
+};
+topology_name str2enum(string topology) {
+    if (topology == "Mesh" ||
+        topology == "mesh") {
+        return mesh_;
+    }
+    else if (topology == "torus" ||
+             topology == "Torus" ||
+             topology == "tori" ||
+             topology == "Torui") {
+        return torus_;
+    }
+    else if (topology == "FlattenedButterfly" ||
+             topology == "FButterfly" ||
+             topology == "f-butterfly" ||
+             topology == "ffly") {
+        return flattened_butterfly_;
+    }
+    else if (topology == "Dragonfly" ||
+             topology == "dragonfly" ||
+             topology == "dfly") {
+        return dragonfly_;
+    }
+    else if (topology == "None" ||
+             topology == "none") {
+        return random_;
+    }
+}
 int main(int argc, char *argv[])
 {
     std::boolalpha;
@@ -138,7 +173,7 @@ int main(int argc, char *argv[])
     cout << "Maximum number of links with given node count for fully "
             "connected topology: " << (2 * nCr(num_nodes, 2)) << endl;
 
-    if(num_nodes > num_links) {
+    if((num_nodes > num_links) && (spl_topology == "None")) {
         cout << "Number of nodes are greater than number of links, " \
                 "therefore a SCC topology is not possible" << endl;
         exit(-1);
@@ -202,19 +237,39 @@ int main(int argc, char *argv[])
 
     // Clean up the priting of results later..
     // FIXME: flow of the code needs to be streamlined
-    if (spl_topology == "Mesh" ||
-        spl_topology == "mesh") {
+    Topology *topology_ = nullptr;
+    switch (str2enum(spl_topology)) {
 
-        Mesh *mesh = new Mesh(num_rows, num_cols);
+        case invalid_:
+            break;
+        case mesh_: {
+            Mesh *mesh = new Mesh(num_rows, num_cols);
+            topology_ = mesh;
+            break;
+        }
+        case torus_: {
+            Torus *torus = new Torus(num_rows, num_cols);
+            topology_ = torus;
+            break;
+        }
+        case flattened_butterfly_:
+            break;
+        case dragonfly_:
+            break;
+        case random_:
+            break;
+    }
+
+    if (topology_) {
         if (verbosity_level >= 1) {
-            mesh->print_topology();
+            topology_->print_topology();
         }
         vector<vector<int>> dot_product_mat;
         for (int appMat_itr = 0; appMat_itr < file->appl_matrix.size(); ++appMat_itr) {
 
             dot_product_mat.clear();
 
-            dot_product_mat = dot_product(mesh->getMHopMatrix(),
+            dot_product_mat = dot_product(topology_->getMHopMatrix(),
                                           file->appl_matrix[appMat_itr]);
 
             uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
