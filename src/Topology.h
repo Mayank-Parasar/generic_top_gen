@@ -96,4 +96,15 @@ public:
     void create_torus();
 };
 
+class FlattenedButterfly : public Topology {
+private:
+    uint32_t m_rows;
+    uint32_t m_cols;
+public:
+    // build the connectivity matrix in the ctor
+    FlattenedButterfly(uint32_t mRows, uint32_t mCols);
+
+    void create_flattened_butterfly();
+};
+
 #endif //GENERIC_TOPO_GEN_TOPOLOGY_H

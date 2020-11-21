@@ -553,3 +553,125 @@ void Torus::create_torus() {
     return;
 }
 
+FlattenedButterfly::FlattenedButterfly(uint32_t mRows, uint32_t mCols)
+        : m_rows(mRows), m_cols(mCols){
+    m_num_nodes = m_rows * m_cols;
+    // update the 'm_num_links' in the create_flattened_butterfly topology
+    /* Creating nodes */
+    for (int node_id = 0; node_id < m_num_nodes; ++node_id) {
+        Node* node_ = new Node(node_id);
+        nodes.push_back(node_);
+    }
+
+    this->create_flattened_butterfly();
+    // Generate connectivity Matrix here
+    // column is 'src'-node (sender) and row is 'dest'-node(receiver)
+    for(int ii = 0; ii < m_num_nodes; ii++) {
+        vector<int> v(m_num_nodes, 0); // all elements = 0
+        for(auto k : nodes[ii]->outgoing_link)
+            v[k->m_dest_node->node_id] = k->m_link_latency;
+        m_connectivity_matrix.push_back(v);
+    }
+
+    // Generate hop matrix here as well
+    for (int src_node_id_ = 0; src_node_id_ < m_num_nodes; ++src_node_id_) {
+        populate_hop_matrix(src_node_id_);
+    }
+
+    return;
+}
+
+void FlattenedButterfly::create_flattened_butterfly() {
+    int link_id = 0;
+    int src_node_id = -1;
+    int dest_node_id = -1;
+
+    // W to E
+    for (int row_ = 0; row_ < m_rows; ++row_) {
+        for (int col_ = 0; col_ < m_cols; ++col_) {
+            src_node_id = col_ + (row_ * m_cols);
+            for (int dest_ = src_node_id+1; dest_ < (row_ * m_cols + m_cols);
+            ++dest_) {
+                dest_node_id = dest_;
+                // create a new link
+                // link is created with its src and destinations
+                Link* link_ = new Link(link_id, nodes[src_node_id],
+                                       nodes[dest_node_id], 1);
+                links.push_back(link_);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                link_id++;
+                 // cout << "connected src_node: " << src_node_id
+                 // << " to dest_node: " << dest_node_id << endl;
+            }
+        }
+    }
+
+    // E to W
+    for (int row_ = 0; row_ < m_rows; ++row_) {
+        for (int col_ = 0; col_ < m_cols; ++col_) {
+            dest_node_id = col_ + (row_ * m_cols);
+            for (int dest_ = dest_node_id+1; dest_ < (row_ * m_cols + m_cols);
+                 ++dest_) {
+                src_node_id = dest_;
+                // create a new link
+                // link is created with its src and destinations
+                Link* link_ = new Link(link_id, nodes[src_node_id],
+                                       nodes[dest_node_id], 1);
+                links.push_back(link_);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                link_id++;
+                 // cout << "connected src_node: " << src_node_id
+                 //      << " to dest_node: " << dest_node_id << endl;
+            }
+        }
+    }
+
+    for (int col_ = 0; col_ < m_cols; ++col_) {
+        for (int row_ = 0; row_ < m_rows; ++row_) {
+            src_node_id = col_ + (row_ * m_cols);
+            int k = col_;
+            while (k < src_node_id) {
+                dest_node_id = k;
+                k += m_cols;
+                // create a new link
+                // link is created with its src and destinations
+                Link* link_ = new Link(link_id, nodes[src_node_id],
+                                       nodes[dest_node_id], 1);
+                links.push_back(link_);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                link_id++;
+                 // cout << "connected src_node: " << src_node_id
+                 //      << " to dest_node: " << dest_node_id << endl;
+            }
+        }
+    }
+
+    for (int col_ = 0; col_ < m_cols; ++col_) {
+        for (int row_ = 0; row_ < m_rows; ++row_) {
+            dest_node_id = col_ + (row_ * m_cols);
+            int k = col_;
+            while (k < dest_node_id) {
+                src_node_id = k;
+                k += m_cols;
+                // create a new link
+                // link is created with its src and destinations
+                Link* link_ = new Link(link_id, nodes[src_node_id],
+                                       nodes[dest_node_id], 1);
+                links.push_back(link_);
+                nodes[src_node_id]->outgoing_link.push_back(links[link_id]);
+                nodes[dest_node_id]->incoming_link.push_back(links[link_id]);
+                link_id++;
+                 // cout << "connected src_node: " << src_node_id
+                 //      << " to dest_node: " << dest_node_id << endl;
+            }
+        }
+    }
+
+    m_num_links = link_id;
+    return;
+}
+
+

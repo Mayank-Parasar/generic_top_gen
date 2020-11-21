@@ -7,3 +7,6 @@ Sample commandline:
 --rows 4 --cols 4 --topology mesh --verbosity 0 --file inp1.txt
 ## For Torus:
 --rows 4 --cols 4 --topology torus --verbosity 2 --file inp1.txt
+## For FlattenedButterfly:
+--rows 4 --cols 4 --topology FlattenedButterfly --verbosity 2 --file inp1.txt
+--rows 2 --cols 8 --topology FlattenedButterfly --verbosity 2 --file inp1.txt

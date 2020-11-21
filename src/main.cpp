@@ -252,8 +252,12 @@ int main(int argc, char *argv[])
             topology_ = torus;
             break;
         }
-        case flattened_butterfly_:
+        case flattened_butterfly_:{
+            FlattenedButterfly *flattened_butterfly =
+                    new FlattenedButterfly(num_rows, num_cols);
+            topology_ = flattened_butterfly;
             break;
+        }
         case dragonfly_:
             break;
         case random_:
@@ -281,7 +285,7 @@ int main(int argc, char *argv[])
                     sum_app_mat);
 
             cout << "Application: " << file->application_name[appMat_itr] <<
-                 "\tTopology-Mesh: " << ":\t" <<
+                 "\tTopology-" <<spl_topology << ": " << ":\t" <<
                  average_hop_count << endl;
         }
 
