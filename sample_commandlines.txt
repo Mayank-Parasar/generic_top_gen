@@ -3,10 +3,16 @@ Sample commandline:
 ./generic_top_gen --nodes 16 --links 24 --topologies 10 --verbosity 2 --file inp1.txt
 --nodes 4 --links 12 --topologies 1 --verbosity 2 --file inp2.txt
 --nodes 16 --links 48 --topologies 1000 --verbosity 0 --file inp1.txt
+--nodes 4 --links 10 --topologies 1 --verbosity 0 --file inp2.txt
+--nodes 256 --links 480 --topologies 100 --verbosity 0 --file amazon0601_cube_comm_hash_part_256.txt
+--nodes 512 --links 1000 --topologies 10 --verbosity 0 --file as-skitter_cube_comm_hash_part_512.txt
+
 ## For Mesh:
 --rows 4 --cols 4 --topology mesh --verbosity 0 --file inp1.txt
+
 ## For Torus:
 --rows 4 --cols 4 --topology torus --verbosity 2 --file inp1.txt
+
 ## For FlattenedButterfly:
 --rows 4 --cols 4 --topology FlattenedButterfly --verbosity 2 --file inp1.txt
 --rows 2 --cols 8 --topology FlattenedButterfly --verbosity 2 --file inp1.txt

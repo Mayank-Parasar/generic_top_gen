@@ -28,7 +28,6 @@ uint64_t nCr(int n, int r) {
 }
 
 uint64_t nC2(int n) {
-    int r = 2;
     return (n*(n-1)/2);
 }
 
