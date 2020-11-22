@@ -27,6 +27,11 @@ uint64_t nCr(int n, int r) {
     return fact(n) / (fact(r) * fact(n - r));
 }
 
+uint64_t nC2(int n) {
+    int r = 2;
+    return (n*(n-1)/2);
+}
+
 //Utility functions:
 vector<vector<int>> dot_product(const vector<vector<int>>& mat1,
                                 const vector<vector<int>>& mat2) {
@@ -171,7 +176,7 @@ int main(int argc, char *argv[])
     }
 
     cout << "Maximum number of links with given node count for fully "
-            "connected topology: " << (2 * nCr(num_nodes, 2)) << endl;
+            "connected topology: " << (2 * nC2(num_nodes)) << endl;
 
     if((num_nodes > num_links) && (spl_topology == "None")) {
         cout << "Number of nodes are greater than number of links, " \
@@ -179,7 +184,7 @@ int main(int argc, char *argv[])
         exit(-1);
     }
     // it is an independent check
-    if(num_links > (2 * nCr(num_nodes, 2))) { // uni-directional links
+    if(num_links > (2 * nC2(num_nodes))) { // uni-directional links
         cout << "Number of links are greater than fully connected"
                 " topology: therefore only fully connected topology is "
                 "possible. Exiting! ";
