@@ -8,6 +8,6 @@
 Optimizer::Optimizer(
         const std::vector<std::vector<std::vector<int>>> &applMatrix)
         : m_appl_matrix(applMatrix) {
-    // initialize 'traffic_percent_mat' in the ctor
+        // initialize 'traffic_percent_mat' in the ctor
 
 }

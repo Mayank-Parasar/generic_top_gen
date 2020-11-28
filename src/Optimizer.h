@@ -24,9 +24,6 @@ public:
 
     // Generate a traffic %age matrix
     std::vector<std::vector<std::vector<int>>> traffic_percent_mat;
-    // class topology may access the
-    // member functions of Optimizer
-    friend class Topology;
 };
 
 #endif //GENERIC_TOPO_GEN_OPTIMIZER_H

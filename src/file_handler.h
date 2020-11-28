@@ -44,7 +44,7 @@ public:
 
     void OpenHandle(const char* file, std::ios_base::openmode mode);
     void CloseHandle(unsigned int id);
-
+    // class-TopologyUniverse access member function of FileHandler
     friend class TopologyUniverse;
 };
 
