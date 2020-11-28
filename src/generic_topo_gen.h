@@ -11,7 +11,6 @@
 #include <cstdlib> // for rand() and srand()
 #include <ctime> // for time()
 #include "Topology.h"
-#include "Optimizer.h"
 #include "file_handler.h"
 
 /* This class contains
@@ -24,7 +23,6 @@ public:
     void init_generic_topo_gen();
     void populate_unique_rings(std::vector<int> node_order);
     void print_universe();
-    friend class FileHandler; // because only needs to access its member
     // function
     void init_optimizer(FileHandler *handle);
 private:
@@ -40,5 +38,4 @@ public:
 private:
     std::vector<std::vector<int>> m_unique_rings;
 };
-
 #endif //GENERIC_TOPO_GEN_GENERIC_TOPO_GEN_H

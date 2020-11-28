@@ -62,3 +62,30 @@ void FileHandler::CloseHandle(unsigned int id) {
     }
     std::cout << "Error: Unknown handle ID " << id << "\n";
 }
+
+// Getters
+const vector<int> &FileHandler::getMatSize() const {
+    return mat_size;
+}
+
+const vector<std::vector<std::vector<int>>> &FileHandler::getMApplMat() const {
+    return m_appl_mat;
+}
+
+const vector<string> &FileHandler::getApplicationName() const {
+    return application_names;
+}
+
+// Setters
+void FileHandler::setMApplMat(
+        const std::vector<std::vector<int>> &mApplMat) {
+    m_appl_mat.push_back(mApplMat);
+}
+
+void FileHandler::setApplicationName(const string &applicationName) {
+    application_names.push_back(applicationName);
+}
+
+void FileHandler::setMatSize(const int &matSize) {
+    mat_size.push_back(matSize);
+}

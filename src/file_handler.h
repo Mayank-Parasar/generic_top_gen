@@ -18,18 +18,26 @@ private:
     unsigned int CurrentHandles;
     std::fstream *Handles;
     bool m_debug;
-public:
-    // initializes that
-    // a new object is created with applicaiton name and
-    // it should contain the traffic for each application..
-    std::fstream& GetHandle(unsigned int id) { return Handles[id]; }
     // This is a vector of matrices
     // It is good to avoid creating pointer to vector as
     // in vector implementation memory is allocated on heap
     // This data-structure will be populated by reading from file
     std::vector<std::vector<std::vector<int>>> m_appl_mat;
-    std::vector<string> application_name;
     std::vector<int> mat_size;
+    std::vector<string> application_names;
+
+public:
+    void setMApplMat(const std::vector<std::vector<int>> &mApplMat);
+    void setApplicationName(const string &applicationName);
+    const vector<std::vector<std::vector<int>>> &getMApplMat() const;
+    const vector<string> &getApplicationName() const;
+    void setMatSize(const int &matSize);
+    const vector<int> &getMatSize() const;
+
+    // initializes that
+    // a new object is created with applicaiton name and
+    // it should contain the traffic for each application..
+    std::fstream& GetHandle(unsigned int id) { return Handles[id]; }
     FileHandler(bool mDebug);
     FileHandler(unsigned int handles, bool mDebug);
     ~FileHandler();
@@ -37,6 +45,7 @@ public:
     void OpenHandle(const char* file, std::ios_base::openmode mode);
     void CloseHandle(unsigned int id);
 
+    friend class TopologyUniverse;
 };
 
 

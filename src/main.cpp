@@ -215,18 +215,18 @@ int main(int argc, char *argv[])
         if (populate_matrix) {
             vec.push_back(stoi(word));
             col++;
-            if (col == (file->mat_size.back())) {
+            if (col == (file->getMatSize().back())) {
                 col = 0;
                 row++;
                 matrix.push_back(vec);
                 vec.clear(); // clear vec
             }
             if ((col == 0) &&
-                row == (file->mat_size.back())){
+                row == (file->getMatSize().back())){
                 col = 0;
                 row = 0;
                 populate_matrix = false; // This matrix has been populated
-                file->m_appl_mat.push_back(matrix);
+                file->setMApplMat(matrix);
                 matrix.clear();
             }
         }
@@ -234,9 +234,9 @@ int main(int argc, char *argv[])
             if (word == "Application:" ||
                 word == "application:") {
                 file->GetHandle(0) >> word; // get the next 'word'
-                file->application_name.push_back(word);
+                file->setApplicationName(word);
                 file->GetHandle(0) >> word; // get the next 'word'
-                file->mat_size.push_back(stoi(word));
+                file->setMatSize(stoi(word));
                 // Now turn-on populating matrices
                 populate_matrix = true;
             }
@@ -278,22 +278,22 @@ int main(int argc, char *argv[])
             topology_->print_topology();
         }
         vector<vector<int>> dot_product_mat;
-        for (int appMat_itr = 0; appMat_itr < file->m_appl_mat.size(); ++appMat_itr) {
+        for (int appMat_itr = 0; appMat_itr < file->getMApplMat().size(); ++appMat_itr) {
 
             dot_product_mat.clear();
 
             dot_product_mat = dot_product(topology_->getMHopMatrix(),
-                                          file->m_appl_mat[appMat_itr]);
+                                          file->getMApplMat()[appMat_itr]);
 
             uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
 
-            uint64_t sum_app_mat = mat_sum(file->m_appl_mat[appMat_itr]) -
-                                   mat_diagonal_sum(file->m_appl_mat[appMat_itr]);
+            uint64_t sum_app_mat = mat_sum(file->getMApplMat()[appMat_itr]) -
+                                   mat_diagonal_sum(file->getMApplMat()[appMat_itr]);
 
             double average_hop_count = (double)sum_dot_product_mat/((double)
                     sum_app_mat);
 
-            cout << "Application: " << file->application_name[appMat_itr] <<
+            cout << "Application: " << file->getApplicationName()[appMat_itr] <<
                  "\tTopology-" <<spl_topology << ": " << ":\t" <<
                  average_hop_count << endl;
         }
@@ -319,23 +319,24 @@ int main(int argc, char *argv[])
     vector<vector<int>> dot_product_mat;
     for (int topo_itr = 0;
          topo_itr < universe->getMTopologies().size(); ++topo_itr) {
-        for (int appMat_itr = 0; appMat_itr < file->m_appl_mat.size(); ++appMat_itr) {
+        for (int appMat_itr = 0; appMat_itr < file->getMApplMat().size();
+        ++appMat_itr) {
             
             dot_product_mat.clear();
 
             dot_product_mat = dot_product(universe->getMTopologies()
-                    [topo_itr]->getMHopMatrix(), file->m_appl_mat[appMat_itr]);
+                    [topo_itr]->getMHopMatrix(), file->getMApplMat()[appMat_itr]);
 
             uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
 
-            uint64_t sum_app_mat = mat_sum(file->m_appl_mat[appMat_itr]) -
-                                   mat_diagonal_sum(file->m_appl_mat[appMat_itr]);
+            uint64_t sum_app_mat = mat_sum(file->getMApplMat()[appMat_itr]) -
+                                   mat_diagonal_sum(file->getMApplMat()[appMat_itr]);
 
             double average_hop_count = (double)sum_dot_product_mat/((double)
             sum_app_mat);
 
-            cout << "Application: " << file->application_name[appMat_itr] <<
-            "\tTopology-ID: " << topo_itr << ":\t" <<
+            cout << "Application: " << file->getApplicationName()[appMat_itr] <<
+                 "\tTopology-ID: " << topo_itr << ":\t" <<
                  average_hop_count << endl;
         }
     }
