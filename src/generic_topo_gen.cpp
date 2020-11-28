@@ -70,4 +70,9 @@ const vector<Topology *> &TopologyUniverse::getMTopologies() const {
     return m_topologies;
 }
 
+void TopologyUniverse::init_optimizer(FileHandler *handle) {
+    cout << "num applications" << handle->m_appl_mat.size();
+    m_opt_ptr = new Optimizer(handle->m_appl_mat);
+}
+
 

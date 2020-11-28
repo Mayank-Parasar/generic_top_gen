@@ -27,7 +27,7 @@ public:
     // It is good to avoid creating pointer to vector as
     // in vector implementation memory is allocated on heap
     // This data-structure will be populated by reading from file
-    std::vector<std::vector<std::vector<int>>> appl_matrix;
+    std::vector<std::vector<std::vector<int>>> m_appl_mat;
     std::vector<string> application_name;
     std::vector<int> mat_size;
     FileHandler(bool mDebug);
@@ -36,6 +36,7 @@ public:
 
     void OpenHandle(const char* file, std::ios_base::openmode mode);
     void CloseHandle(unsigned int id);
+
 };
 
 

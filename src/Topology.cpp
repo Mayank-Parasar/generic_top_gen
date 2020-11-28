@@ -3,6 +3,7 @@
 //
 
 #include "Topology.h"
+
 using namespace  std;
 // class-Topology member-functions definition
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
@@ -25,6 +26,7 @@ Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
     // start the process of generating a random topology and its associated
     // data structure here..
     create_ring(); // created a random ring
+
     create_topology(); // generated a random topology, based on the ring created
     return;
 };

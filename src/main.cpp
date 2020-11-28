@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
     // This variables can be set via the command line.
     bool        oPrintHelp = false;
     bool        debug_print = false;
+    bool        optimizer = true;
     uint32_t    num_nodes = 0;
     uint32_t    num_links = 0;
     uint32_t    num_rows = 0;   // number of rows in a Mesh
@@ -143,6 +144,10 @@ int main(int argc, char *argv[])
     parser.addArgument({"-v", "--verbosity"},
                        &verbosity_level, "Verbosity while running the tool, "
                                          "for debug");
+    parser.addArgument({"-opt", "--optimizer"}, &optimizer,
+                       "this enables the topology generator to generate "
+                       "random but optimized topologies based on the traffic "
+                       "pattern of the application");
     parser.addArgument({"-h", "--help"}, &oPrintHelp,
                      "Print this help. Help can be printing by "
                      "setting oPrintHelp flag true at compile time! "
@@ -221,7 +226,7 @@ int main(int argc, char *argv[])
                 col = 0;
                 row = 0;
                 populate_matrix = false; // This matrix has been populated
-                file->appl_matrix.push_back(matrix);
+                file->m_appl_mat.push_back(matrix);
                 matrix.clear();
             }
         }
@@ -273,17 +278,17 @@ int main(int argc, char *argv[])
             topology_->print_topology();
         }
         vector<vector<int>> dot_product_mat;
-        for (int appMat_itr = 0; appMat_itr < file->appl_matrix.size(); ++appMat_itr) {
+        for (int appMat_itr = 0; appMat_itr < file->m_appl_mat.size(); ++appMat_itr) {
 
             dot_product_mat.clear();
 
             dot_product_mat = dot_product(topology_->getMHopMatrix(),
-                                          file->appl_matrix[appMat_itr]);
+                                          file->m_appl_mat[appMat_itr]);
 
             uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
 
-            uint64_t sum_app_mat = mat_sum(file->appl_matrix[appMat_itr]) -
-                                   mat_diagonal_sum(file->appl_matrix[appMat_itr]);
+            uint64_t sum_app_mat = mat_sum(file->m_appl_mat[appMat_itr]) -
+                                   mat_diagonal_sum(file->m_appl_mat[appMat_itr]);
 
             double average_hop_count = (double)sum_dot_product_mat/((double)
                     sum_app_mat);
@@ -298,6 +303,10 @@ int main(int argc, char *argv[])
 
     TopologyUniverse *universe = new TopologyUniverse(num_nodes, num_links,
                                                       num_topology, debug_print);
+    /* invoke optimizer here */
+    if (optimizer) {
+        universe->init_optimizer(file);
+    }
     universe->init_generic_topo_gen();
 
     if (verbosity_level >= 1) {
@@ -310,17 +319,17 @@ int main(int argc, char *argv[])
     vector<vector<int>> dot_product_mat;
     for (int topo_itr = 0;
          topo_itr < universe->getMTopologies().size(); ++topo_itr) {
-        for (int appMat_itr = 0; appMat_itr < file->appl_matrix.size(); ++appMat_itr) {
+        for (int appMat_itr = 0; appMat_itr < file->m_appl_mat.size(); ++appMat_itr) {
             
             dot_product_mat.clear();
 
             dot_product_mat = dot_product(universe->getMTopologies()
-                    [topo_itr]->getMHopMatrix(), file->appl_matrix[appMat_itr]);
+                    [topo_itr]->getMHopMatrix(), file->m_appl_mat[appMat_itr]);
 
             uint64_t sum_dot_product_mat = mat_sum(dot_product_mat);
 
-            uint64_t sum_app_mat = mat_sum(file->appl_matrix[appMat_itr]) -
-                                   mat_diagonal_sum(file->appl_matrix[appMat_itr]);
+            uint64_t sum_app_mat = mat_sum(file->m_appl_mat[appMat_itr]) -
+                                   mat_diagonal_sum(file->m_appl_mat[appMat_itr]);
 
             double average_hop_count = (double)sum_dot_product_mat/((double)
             sum_app_mat);

@@ -9,6 +9,7 @@
 #include <cassert>
 #include "Node.h"
 #include "Link.h"
+#include "Optimizer.h"
 
 /* One object per topology */
 class Topology {
@@ -37,7 +38,8 @@ public:
     Topology(); //default ctor
     Topology(uint32_t mNumNodes, uint32_t mNumLinks);
     Topology(uint32_t mNumNodes, uint32_t mNumLinks,
-             std::vector<int> mBaseRing, bool mDebug);
+             std::vector<int> mBaseRing, bool mDebug/*,
+             FileHandler* file_obj = nullptr)*/);
     void create_topology();
     void set_params(int nodes, int links);
     bool is_connected(Node* src_node, Node* dest_node);
@@ -66,7 +68,9 @@ public:
     // helper function
     int minDistance(int dist[], bool sptSet[]);
     void print_topology();
+
 };
+
 
 class Mesh : public Topology {
 private:

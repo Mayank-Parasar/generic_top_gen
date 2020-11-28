@@ -11,6 +11,8 @@
 #include <cstdlib> // for rand() and srand()
 #include <ctime> // for time()
 #include "Topology.h"
+#include "Optimizer.h"
+#include "file_handler.h"
 
 /* This class contains
  * many automatically generated
@@ -22,6 +24,9 @@ public:
     void init_generic_topo_gen();
     void populate_unique_rings(std::vector<int> node_order);
     void print_universe();
+    friend class FileHandler; // because only needs to access its member
+    // function
+    void init_optimizer(FileHandler *handle);
 private:
     uint32_t m_num_nodes;
     uint32_t m_num_links;
@@ -31,6 +36,7 @@ private:
 public:
     const std::vector<Topology *> &getMTopologies() const;
 
+    [[maybe_unused]] Optimizer* m_opt_ptr;
 private:
     std::vector<std::vector<int>> m_unique_rings;
 };
