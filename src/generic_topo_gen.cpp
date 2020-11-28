@@ -8,9 +8,11 @@ using namespace  std;
 
 // class-TopologyUniverse member-functions definitions
 TopologyUniverse::TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
-                                   uint32_t mNumTopology, bool mDebug)
+                                   uint32_t mNumTopology, bool mDebug,
+                                   bool mUniqueRingsCheck)
         : m_num_nodes(mNumNodes), m_num_links(mNumLinks),
-          m_num_topology(mNumTopology), m_debug(mDebug)
+          m_num_topology(mNumTopology), m_debug(mDebug),
+          m_unique_rings_check(mUniqueRingsCheck)
           {}
 
 void
@@ -42,11 +44,17 @@ TopologyUniverse::populate_unique_rings(std::vector<int> node_order) {
         swap(node_order[k], node_order[r]);
     }
     // check
-    for(int i = 0; i < node_order.size(); i++) {
-        rotate(node_order.begin(), node_order.begin()+1, node_order.end());
-        for(auto i : m_unique_rings)
-            if (i == node_order)
-                goto shuffle;
+    // This check can be expensive to generate topologies of larger size
+    // say 1k nodes, 10k nodes with higher number of random topoplgies etc:
+    // disabling this check based on a command line switch
+    if (m_unique_rings_check) {
+        for (int i = 0; i < node_order.size(); i++) {
+            rotate(node_order.begin(), node_order.begin() + 1,
+                   node_order.end());
+            for (auto i : m_unique_rings)
+                if (i == node_order)
+                    goto shuffle;
+        }
     }
     //store
     if(m_unique_rings.size() < m_num_topology) {

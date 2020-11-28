@@ -105,6 +105,8 @@ topology_name str2enum(string topology) {
              topology == "none") {
         return random_;
     }
+    // if there is no name matched
+    return invalid_;
 }
 int main(int argc, char *argv[])
 {
@@ -116,6 +118,7 @@ int main(int argc, char *argv[])
     bool        oPrintHelp = false;
     bool        debug_print = false;
     bool        optimizer = true;
+    bool        unique_rings = true;
     uint32_t    num_nodes = 0;
     uint32_t    num_links = 0;
     uint32_t    num_rows = 0;   // number of rows in a Mesh
@@ -141,6 +144,9 @@ int main(int argc, char *argv[])
                                                       "enables debug "
                                                       "messages, by default "
                                                       "it is turned-off");
+    parser.addArgument({"-ur", "--uniqueRings"}, &unique_rings,
+                       "when set false, it disables the check for unique "
+                       "rings");
     parser.addArgument({"-v", "--verbosity"},
                        &verbosity_level, "Verbosity while running the tool, "
                                          "for debug");
@@ -302,7 +308,9 @@ int main(int argc, char *argv[])
     }
 
     TopologyUniverse *universe = new TopologyUniverse(num_nodes, num_links,
-                                                      num_topology, debug_print);
+                                                      num_topology,
+                                                      debug_print,
+                                                      unique_rings);
     /* invoke optimizer here */
     if (optimizer) {
         universe->init_optimizer(file);

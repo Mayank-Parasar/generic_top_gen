@@ -19,7 +19,8 @@
 class TopologyUniverse {
 public:
     TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
-                     uint32_t mNumTopology, bool debug);
+                     uint32_t mNumTopology, bool debug,
+                     bool mUniqueRingsCheck = true);
     void init_generic_topo_gen();
     void populate_unique_rings(std::vector<int> node_order);
     void print_universe();
@@ -31,6 +32,7 @@ private:
     uint32_t m_num_topology;
     bool m_debug;
     std::vector<Topology*> m_topologies;
+    bool m_unique_rings_check;
 public:
     const std::vector<Topology *> &getMTopologies() const;
 
