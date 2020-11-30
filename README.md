@@ -9,7 +9,7 @@ This tool also supports regular topologies for example: _Mesh_, _Torus_, _Flatte
 
 Check `sample_commandlines.txt` to run the tool under different configurations 
 
-##TODOs:
+## TODOs:
 * Add optimizer support for generating topologies based on the traffic pattern _(in progress)_
 * Python visualizer, which reads connectivity matrix (aka adjacency matrix) and shows the random topology generated with directed connections) _(in progress)_
 * Add support for more well know topologies, for example _DragonFly_, _MegaFly_, _SlimFly_	[ Support needed ] 
