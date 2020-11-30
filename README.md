@@ -2,10 +2,12 @@
 Generic Topology Generator
 
 This tool takes number of nodes and number of links;
-Then generate random toplogies 
+Then generates random toplogies 
 (which are strongly connected).
 The number of random topologies is specified by the user.
 This tool also supports regular topologies for example: _Mesh_, _Torus_, _FlattenedButterfly_.
+
+Check `sample_commandlines.txt` to run the tool under different configurations 
 
 ##TODOs:
 * Add optimizer support for generating topologies based on the traffic pattern _(in progress)_
