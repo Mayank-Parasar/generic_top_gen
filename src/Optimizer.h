@@ -13,14 +13,39 @@
 #include <algorithm>
 
 using namespace  std;
+
+struct elements {
+    int src_id_;
+    int dest_id_;
+    double weight_;
+
+    elements(int rowId, int colId, double weight)
+        : src_id_(rowId), dest_id_(colId), weight_(weight)
+    { }
+
+    elements() : src_id_(-1), dest_id_(-1), weight_(-0.1)
+    { }
+
+    bool operator<(const elements &rhs) const {
+        return weight_ < rhs.weight_;
+    }
+
+
+};
+
+
 class Optimizer{
 public:
     Optimizer(const vector<std::vector<std::vector<int>>> &applMatrix);
 
     // this member contains sorted connections by weight, after
     // reading from file
-    deque<pair<double/*weight*/, pair<int/*src*/,int /*dest*/>>>
-            sorted_weighted_connections;
+    // this is a vector. One per each application
+    /*deque<pair<double*//*weight*//*, pair<int*//*src*//*,int *//*dest*//*>>>
+            sorted_weighted_connections;*/
+    vector<deque<elements*>> sorted_weighted_connection;
+
+    void print_sorted_weighted_connection();
 
     // This is the application matrix
     std::vector<std::vector<std::vector<int>>> m_appl_matrix;
@@ -28,6 +53,8 @@ public:
     // Generate a traffic %age matrix
     std::vector<std::vector<std::vector<double>>> m_traffic_percent_mat;
 
+    // populate vector_deque_elements
+    void populate_vector_deque_elements();
     template<typename T>
     void printVector(const T& t) {
         std::copy(t.cbegin(), t.cend(),
@@ -67,6 +94,10 @@ public:
             sum += i;
         }
         return sum;
+    }
+
+    static bool comparePtrElem(elements* a, elements* b) {
+        return (a->weight_ > b->weight_);
     }
 };
 

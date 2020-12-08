@@ -51,4 +51,46 @@ Optimizer::Optimizer(
         print_matrix((m_traffic_percent_mat[i]));
     }
 
+    populate_vector_deque_elements();
+
 }
+
+void Optimizer::populate_vector_deque_elements() {
+    // traverse through the m_traffic_percent_mat
+    for (int app_id = 0; app_id < m_traffic_percent_mat.size(); ++app_id) {
+        deque<elements*> tmp;
+        for (int row_ = 0; row_ < m_traffic_percent_mat[app_id].size(); ++row_) {
+            for (int col_ = 0;
+                 col_ < m_traffic_percent_mat[app_id][row_].size(); ++col_) {
+                elements* elem = new elements(row_, col_,
+                                              m_traffic_percent_mat[app_id][row_][col_]);
+                tmp.push_back(elem);  // row-major form
+            }
+        }
+        // sort tmp (in desending order)
+        // Sort
+        sort(tmp.begin(), tmp.end(), comparePtrElem);
+
+        sorted_weighted_connection.push_back(tmp);
+        tmp.clear();
+    }
+    // print_sorted_weighted_connection();
+}
+
+void Optimizer::print_sorted_weighted_connection() {
+
+    for (int app_id = 0; app_id < sorted_weighted_connection.size(); ++app_id) {
+        cout << "Sorted weight for application-id: \t" << app_id << endl;
+        cout << "src-id: \t\t dest-id: \t\t  weight:" <<endl;
+        for (int id_ = 0;
+             id_ < sorted_weighted_connection[app_id].size(); ++id_) {
+            cout << "\t" << sorted_weighted_connection[app_id][id_]->src_id_ <<
+            "\t\t\t" << sorted_weighted_connection[app_id][id_]->dest_id_ <<
+            "\t\t\t\t" << sorted_weighted_connection[app_id][id_]->weight_ <<
+            endl;
+        }
+    }
+
+}
+
+
