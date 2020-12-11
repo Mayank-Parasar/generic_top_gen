@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.15)
 project(generic_topo_gen)
 
 set(CMAKE_CXX_STANDARD 17)
