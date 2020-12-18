@@ -312,10 +312,12 @@ int main(int argc, char *argv[])
                                                       debug_print,
                                                       unique_rings);
     /* invoke optimizer here */
+    Optimizer* opt_ = nullptr;
     if (optimizer) {
-        universe->init_optimizer(file);
+        opt_ = universe->init_optimizer(file);
     }
-    universe->init_generic_topo_gen();
+    // pass the initiated optimizer
+    universe->init_generic_topo_gen(opt_);
 
     if (verbosity_level >= 1) {
         universe->print_universe();

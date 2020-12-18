@@ -21,11 +21,11 @@ public:
     TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
                      uint32_t mNumTopology, bool debug,
                      bool mUniqueRingsCheck = true);
-    void init_generic_topo_gen();
+    void init_generic_topo_gen(Optimizer* opt_ = nullptr);
     void populate_unique_rings(std::vector<int> node_order);
     void print_universe();
     // function
-    void init_optimizer(FileHandler *handle);
+    Optimizer * init_optimizer(FileHandler *handle);
 private:
     uint32_t m_num_nodes;
     uint32_t m_num_links;

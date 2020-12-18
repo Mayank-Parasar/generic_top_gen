@@ -34,12 +34,13 @@ protected:
     std::vector<Link*> links;
     std::vector<int> m_base_ring; // contains the order of nodes
     bool m_debug;
+    Optimizer* m_optimizer;
 public:
     Topology(); //default ctor
     Topology(uint32_t mNumNodes, uint32_t mNumLinks);
     Topology(uint32_t mNumNodes, uint32_t mNumLinks,
-             std::vector<int> mBaseRing, bool mDebug/*,
-             FileHandler* file_obj = nullptr)*/);
+             std::vector<int> mBaseRing, bool mDebug,
+             Optimizer* optimizer = nullptr);
     void create_topology();
     void set_params(int nodes, int links);
     bool is_connected(Node* src_node, Node* dest_node);

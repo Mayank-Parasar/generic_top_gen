@@ -70,11 +70,11 @@ void Optimizer::populate_vector_deque_elements() {
         // sort tmp (in desending order)
         // Sort
         sort(tmp.begin(), tmp.end(), comparePtrElem);
-
         sorted_weighted_connection.push_back(tmp);
         tmp.clear();
     }
     // print_sorted_weighted_connection();
+    return;
 }
 
 void Optimizer::print_sorted_weighted_connection() {
