@@ -115,18 +115,20 @@ int main(int argc, char *argv[])
 	cout << "Hello world" << endl;
 
     // This variables can be set via the command line.
-    bool        oPrintHelp = false;
-    bool        debug_print = false;
-    bool        optimizer = true;
-    bool        unique_rings = true;
-    uint32_t    num_nodes = 0;
-    uint32_t    num_links = 0;
-    uint32_t    num_rows = 0;   // number of rows in a Mesh
-    uint32_t    num_cols = 0;   // number of columns in a Mesh
-    uint32_t    num_topology = 0;
-    uint32_t    verbosity_level = 0;
-    string      input_file;
-    string      spl_topology = "None";
+    bool        oPrintHelp          =   false;
+    bool        debug_print         =   false;
+    bool        optimizer           =   true;
+    bool        unique_rings        =   true;
+    uint32_t    num_nodes           =   0;
+    uint32_t    num_links           =   0;
+    uint32_t    num_rows            =   0;   // number of rows in a Mesh
+    uint32_t    num_cols            =   0;   // number of columns in a Mesh
+    uint32_t    num_topology        =   0;
+    uint32_t    verbosity_level     =   0;
+    string      input_file          =   "None";
+    string      spl_topology        =   "None";
+    string      policy              =   "None";
+    double      threshold           =   0.0;
     // First configure all possible command line options.
     Parser parser("Customized C++ command line parser.");
     parser.addArgument({"-n", "--nodes"}, &num_nodes, "Number of Nodes in the topology");
@@ -135,6 +137,15 @@ int main(int argc, char *argv[])
                                                       " Mesh topology");
     parser.addArgument({"-c", "--cols"}, &num_cols, "Number of columns in the"
                                                      " Mesh topology");
+    parser.addArgument({"-p", "--policy"}, &policy,
+                       "Optimization policy for topology generation: "
+                       "1. Round robin,"
+                       "2. Greedy etc,"
+                       " default value is none");
+    parser.addArgument({"-thrld", "--threshold"}, &threshold,
+                       "Fraction of number of messages threshold for "
+                       "Optiming link buget for topology generation "
+                       " default value is 0");
     parser.addArgument({"-st", "--topology"}, &spl_topology,
                        "Special topology such as Mesh, Torus, DragonFly, etc");
     parser.addArgument({"-t", "--topologies"}, &num_topology, "Number of topologies");
