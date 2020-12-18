@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
                        " default value is none");
     parser.addArgument({"-thrld", "--threshold"}, &threshold,
                        "Fraction of number of messages threshold for "
-                       "Optiming link buget for topology generation "
+                       "Optimizing link budget for topology generation "
                        " default value is 0");
     parser.addArgument({"-st", "--topology"}, &spl_topology,
                        "Special topology such as Mesh, Torus, DragonFly, etc");
