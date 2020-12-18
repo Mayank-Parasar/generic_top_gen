@@ -66,7 +66,8 @@ public:
     // missing for a given option. Unknown flags will cause a warning on
     // std::cerr.
     void parse(int argc, char* argv[]) const;
-
+    // Add friend class here
+    friend class Topology;
 private:
     struct Argument {
         std::vector<std::string> mFlags;

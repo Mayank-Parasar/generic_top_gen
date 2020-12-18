@@ -12,6 +12,7 @@
 #include <ctime> // for time()
 #include "Topology.h"
 #include "file_handler.h"
+#include "commandline_parser.h"
 
 /* This class contains
  * many automatically generated
@@ -21,7 +22,7 @@ public:
     TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
                      uint32_t mNumTopology, bool debug,
                      bool mUniqueRingsCheck = true);
-    void init_generic_topo_gen(Optimizer* opt_ = nullptr);
+    void init_generic_topo_gen(Parser& parser, Optimizer* opt_ = nullptr);
     void populate_unique_rings(std::vector<int> node_order);
     void print_universe();
     // function

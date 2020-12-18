@@ -16,7 +16,7 @@ TopologyUniverse::TopologyUniverse(uint32_t mNumNodes, uint32_t mNumLinks,
           {}
 
 void
-TopologyUniverse::init_generic_topo_gen(Optimizer* optimizer) {
+TopologyUniverse::init_generic_topo_gen(Parser& parser, Optimizer* optimizer) {
     vector<int> node_order;
     for(int i = 0; i < m_num_nodes; i++) {
         node_order.push_back(i);
@@ -27,7 +27,7 @@ TopologyUniverse::init_generic_topo_gen(Optimizer* optimizer) {
     for (uint32_t mTopology = 0; mTopology < m_num_topology; ++mTopology) {
         Topology *topology_ = new Topology(m_num_nodes, m_num_links,
                                            m_unique_rings[mTopology],
-                                           m_debug, optimizer);
+                                           m_debug, parser, optimizer);
         m_topologies.push_back(topology_);
     }
 }

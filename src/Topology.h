@@ -10,6 +10,7 @@
 #include "Node.h"
 #include "Link.h"
 #include "Optimizer.h"
+#include "commandline_parser.h"
 
 /* One object per topology */
 class Topology {
@@ -34,13 +35,22 @@ protected:
     std::vector<Link*> links;
     std::vector<int> m_base_ring; // contains the order of nodes
     bool m_debug;
+    Parser* m_parser;
     Optimizer* m_optimizer;
 public:
     Topology(); //default ctor
     Topology(uint32_t mNumNodes, uint32_t mNumLinks);
     Topology(uint32_t mNumNodes, uint32_t mNumLinks,
              std::vector<int> mBaseRing, bool mDebug,
-             Optimizer* optimizer = nullptr);
+             Parser& parser, Optimizer* optimizer = nullptr);
+    Topology(uint32_t mNumNodes, uint32_t mNumLinks,
+             std::vector<int> mBaseRing, bool mDebug) :
+        m_num_nodes(mNumNodes), m_num_links(mNumLinks),
+        m_base_ring(mBaseRing), m_debug(mDebug)
+        {
+            // dummy for compilation purpose of inherited class
+            // not used anyway
+        }
     void create_topology();
     void set_params(int nodes, int links);
     bool is_connected(Node* src_node, Node* dest_node);

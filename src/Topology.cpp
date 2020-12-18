@@ -7,12 +7,17 @@
 using namespace  std;
 // class-Topology member-functions definition
 Topology::Topology(uint32_t mNumNodes, uint32_t mNumLinks,
-                   vector<int> mBaseRing, bool mDebug,
+                   vector<int> mBaseRing, bool mDebug, Parser& mParser,
                    Optimizer* mOptimizer)
         : m_num_nodes(mNumNodes), m_num_links(mNumLinks),
         m_base_ring(mBaseRing), m_debug(mDebug),
+        m_parser(&mParser),
         m_optimizer(mOptimizer)
 {
+    for (int indx = 0; indx < m_parser->mArguments.size(); ++indx) {
+        cout << m_parser->mArguments[indx].mFlags[1];
+        cout << flush;
+    }
     // call the ctor of Nodes* and Link* class here
     /* Creating nodes */
     for (int node_id = 0; node_id < m_num_nodes; ++node_id) {

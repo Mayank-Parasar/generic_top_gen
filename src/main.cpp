@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
         opt_ = universe->init_optimizer(file);
     }
     // pass the initiated optimizer
-    universe->init_generic_topo_gen(opt_);
+    universe->init_generic_topo_gen(parser ,opt_);
 
     if (verbosity_level >= 1) {
         universe->print_universe();
